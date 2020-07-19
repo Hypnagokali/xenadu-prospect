@@ -1,6 +1,14 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Home from '../views/Home.vue';
+import Missions from '@/views/missions/Missions.vue';
+import AddGoal from '@/views/missions/AddGoal.vue';
+import GoalMonitor from '@/views/missions/GoalMonitor.vue';
+import Routines from '@/views/Routines.vue';
+import Home from '@/views/Home.vue';
+import Login from '@/views/Login.vue';
+import Dashboard from '@/views/Dashboard.vue';
+import hook from './beforeEnterHook';
+
 
 Vue.use(VueRouter);
 
@@ -11,12 +19,54 @@ const routes = [
     component: Home,
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
+    path: '/login',
+    name: 'Login',
+    component: Login,
+  },
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: Dashboard,
+    meta: {
+      requiresAuth: true,
+    },
+    beforeEnter: hook,
+  },
+  {
+    path: '/routine-mirror',
+    name: 'Routines',
+    component: Routines,
+    meta: {
+      requiresAuth: true,
+    },
+    beforeEnter: hook,
+  },
+  {
+    path: '/missionboard',
+    name: 'Missions',
+    component: Missions,
+    meta: {
+      requiresAuth: true,
+    },
+    beforeEnter: hook,
+  },
+  {
+    path: '/missionboard/goals',
+    name: 'Goals',
+    component: GoalMonitor,
+    meta: {
+      requiresAuth: true,
+    },
+    beforeEnter: hook,
+  },
+  {
+    path: '/missionboard/goal/add',
+    name: 'AddGoal',
+    component: AddGoal,
+    meta: {
+      requiresAuth: true,
+    },
+    beforeEnter: hook,
   },
 ];
 
