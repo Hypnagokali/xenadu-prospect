@@ -1,6 +1,5 @@
 <template>
   <div>
-    {{ testValue }}
     <ul class="menu align-center">
       <li><a href="#" @click="loadCurrentWeek()">Diese Woche</a></li>
       <li><a href="#">Nächste Woche</a></li>
@@ -25,6 +24,7 @@
               :goal="selectedGoal"
               v-if="showDeleteModal"
               @close="closeDeleteModal"
+              @closeWithMsg="closeWithMsg"
             >
             </DeleteDialog>
           </transition>
@@ -32,7 +32,6 @@
             <EditGoalDialog
             :goal="selectedGoal"
             @close="closeEditModal"
-            @closeWithMsg="closeWithMsg"
             v-if="showEditModal">
             </EditGoalDialog>
           </transition>
@@ -67,6 +66,8 @@ export default {
   },
   data() {
     return {
+      testMuh: 'Muh data',
+      testFoo: 'Foo data',
       goals: [],
       selectedGoal: {},
       isLoading: false,
@@ -86,7 +87,9 @@ export default {
     ...mapActions([
       'currentWeek',
     ]),
-    closeWithMessage(msg) {
+    closeWithMsg(msg) {
+      this.closeDeleteModal();
+      this.goals = this.getGoalsFromStore;
       console.log(msg);
     },
     loadCurrentWeek() {
@@ -117,6 +120,9 @@ export default {
     closeEditModal() {
       this.showEditModal = false;
     },
+  },
+  mounted() {
+    this.loadCurrentWeek();
   },
 };
 </script>

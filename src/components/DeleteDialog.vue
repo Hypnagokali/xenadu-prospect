@@ -12,7 +12,8 @@
       </div>
     </template>
     <template v-slot:footer>
-      <button @click="deleteGoal" class="button alert">Do it!</button>
+      <div v-if="isLoading">Wird gelöscht ...</div>
+      <button :disabled="isLoading" @click="deleteGoal" class="button alert">Do it!</button>
     </template>
   </XenaduModal>
 </template>
@@ -28,7 +29,7 @@ export default {
   },
   data() {
     return {
-      isLoading: false,
+      loading: false,
     };
   },
   props: {
@@ -37,11 +38,17 @@ export default {
       required: true,
     },
   },
+  computed: {
+    isLoading() {
+      return this.loading;
+    },
+  },
   methods: {
     ...mapActions([
       'delete',
     ]),
     deleteGoal() {
+      this.loading = true;
       console.log('delete-modal: ', this.goal);
       this.delete(this.goal)
         .then(() => {
@@ -49,7 +56,7 @@ export default {
         })
         .catch()
         .finally(() => {
-          this.isLoading = false;
+          this.loading = false;
         });
     },
   },

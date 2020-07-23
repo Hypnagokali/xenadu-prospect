@@ -30,14 +30,27 @@ export default {
       const replaceIndex = state.goals.findIndex((g) => g.id === goalObj.id);
       state.goals[replaceIndex] = goalObj;
     },
+    REMOVE_GOAL(state, id) {
+      // const removeIndex = state.goals.findIndex((g) => g.id === id);
+      const goalsWithoutRemovedItem = state.goals.filter((g) => g.id !== id);
+      console.log('REMOVE GOAL WITH FILTER');
+      console.log(goalsWithoutRemovedItem);
+      state.goals = goalsWithoutRemovedItem;
+    },
     SET_ERROR_MESSAGES(state, errObj) {
       state.errorMessages = errObj;
     },
   },
   actions: {
-    delete({ _ }, myGoal) {
-      console.log(_);
-      console.log(`delete goal: ${myGoal}`, myGoal);
+    async delete({ commit }, myGoal) {
+      const { id } = myGoal;
+      await axios.post(`prospect/week/goal/${id}/delete`)
+        .then(() => {
+          commit('REMOVE_GOAL', id);
+        })
+        .catch((ex) => {
+          console.log(ex);
+        });
     },
     currentWeek({ dispatch, commit }) {
       return new Promise((resolve, reject) => {

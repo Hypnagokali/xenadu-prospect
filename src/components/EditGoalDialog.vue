@@ -50,7 +50,8 @@
       </div>
     </template>
     <template v-slot:footer>
-      <button class="button" @click="updateGoal">Ändern</button>
+      <div v-if="isLoading">Wird geändert ...</div>
+      <button :disabled="isLoading" class="button" @click="updateGoal">Ändern</button>
     </template>
   </XenaduModal>
 </transition>
@@ -94,6 +95,9 @@ export default {
       }
       return '';
     },
+    isLoading() {
+      return this.loading;
+    },
     onSuccess() {
       if (this.isSuccess) {
         return 'Ziel geändert';
@@ -122,7 +126,7 @@ export default {
         cw: this.goal.week.cw,
         workloadLevel: this.goal.workloadPoints.level,
       },
-      isLoading: false,
+      loading: false,
       isSuccess: false,
     };
   },
@@ -132,7 +136,7 @@ export default {
     ]),
     updateGoal() {
       this.isSuccess = false;
-      this.isLoading = false;
+      this.loading = true;
       this.update(this.form)
         .then(() => {
           if (!this.isInputInvalid) {
@@ -143,7 +147,7 @@ export default {
           console.log(e);
         })
         .finally(() => {
-          this.isLoading = false;
+          this.loading = false;
         });
     },
     getValue() {

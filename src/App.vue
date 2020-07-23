@@ -1,16 +1,19 @@
 <template>
   <div id="app">
     <Navigation></Navigation>
+    <Loading></Loading>
     <router-view></router-view>
   </div>
 </template>
 
 <script>
 import Navigation from '@/components/TheNavigation.vue';
+import Loading from '@/components/TheLoading.vue';
 
 export default {
   components: {
     Navigation,
+    Loading,
   },
 };
 </script>

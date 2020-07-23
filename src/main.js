@@ -18,11 +18,15 @@ store.dispatch('auth/attempt', localStorage.getItem('token')).then(() => {
   // Guard Routes
   // to get a quick temporary solution I copied the code from stackoverflow:
   // https://stackoverflow.com/questions/52653337/vuejs-redirect-from-login-register-to-home-if-already-loggedin-redirect-from
-  router.beforeEach((to, from, next) => {
+  router.beforeEach(async (to, from, next) => {
     if (to.matched.some((record) => record.meta.requiresAuth)) {
       // this route requires auth, check if logged in
       // if not, redirect to login page.
-      if (store.getters.isAuthenticated === null) {
+      console.log('requires Auth!');
+      store.commit('requestState/SET_WAITING');
+      const auth = await store.dispatch('auth/attempt', localStorage.getItem('token'));
+      if (!auth) {
+        console.log('not authenticated');
         next({
           name: 'Login',
         });
@@ -32,6 +36,10 @@ store.dispatch('auth/attempt', localStorage.getItem('token')).then(() => {
     } else {
       next(); // does not require auth, make sure to always call next()!
     }
+  });
+
+  router.afterEach(() => {
+    store.commit('requestState/SET_READY');
   });
 
   new Vue({
