@@ -1,47 +1,56 @@
 <template>
   <div>
-    <ul class="menu align-center">
-      <li><a href="#" @click="loadCurrentWeek()">Diese Woche</a></li>
-      <li><a href="#">Nächste Woche</a></li>
-      <li><a href="#">Gesamtüberblick</a></li>
-    </ul>
-    <div>
-      <h3>Meine Wochenziele</h3>
-      <button class="button success" @click="$router.push({name: 'AddGoal'})">
-          Neues Wochenziel
-      </button>
-      <div>
-        <h5>Diese Woche</h5>
-        <div v-if="isLoading">
-          <img src="@/assets/loadring.gif">
+    <div class="xenadu-view-header">
+      <ul class="xenadu-menu menu align-center">
+        <li><a href="#" @click="loadCurrentWeek()">Diese Woche</a></li>
+        <li><a href="#">Nächste Woche</a></li>
+        <li><a href="#">Gesamtüberblick</a></li>
+      </ul>
+    </div>
+
+    <div class="grid-x">
+      <div class="cell medium-12">
+        <div class="xenadu-view-subheader">
+          <h3>Ziele - Monitor</h3>
+          <button class="xenadu-action button" @click="$router.push({name: 'AddGoal'})">
+              Neues Wochenziel
+          </button>
         </div>
-        <div v-if="isLoading === false" class="goals">
-          <div v-if="goals.length < 1">
-            Noch keine Eintragungen
+      </div>
+
+      <div class="cell medium-12">
+        <div class="xenadu-view-content">
+          <div class="xenadu-load-animation" v-if="isLoading">
+            <img src="@/assets/loadring.gif">
           </div>
-          <transition name="modal">
-            <DeleteDialog
+          <div v-if="isLoading === false" class="goals">
+            <div v-if="goals.length < 1">
+              Noch keine Eintragungen
+            </div>
+            <transition name="modal">
+              <DeleteDialog
+                :goal="selectedGoal"
+                v-if="showDeleteModal"
+                @close="closeDeleteModal"
+                @closeWithMsg="closeWithMsg"
+              >
+              </DeleteDialog>
+            </transition>
+            <transition name="modal">
+              <EditGoalDialog
               :goal="selectedGoal"
-              v-if="showDeleteModal"
-              @close="closeDeleteModal"
-              @closeWithMsg="closeWithMsg"
-            >
-            </DeleteDialog>
-          </transition>
-          <transition name="modal">
-            <EditGoalDialog
-            :goal="selectedGoal"
-            @close="closeEditModal"
-            v-if="showEditModal">
-            </EditGoalDialog>
-          </transition>
-          <div v-for="goal in goals" v-bind:key="goal.id">
-            <GoalComponent
-              @displayEditModal="openEditModal"
-              @displayDeleteModal="openDeleteModal"
-              :goal="goal"
-            >
-            </GoalComponent>
+              @close="closeEditModal"
+              v-if="showEditModal">
+              </EditGoalDialog>
+            </transition>
+            <div v-for="goal in goals" v-bind:key="goal.id">
+              <GoalComponent
+                @displayEditModal="openEditModal"
+                @displayDeleteModal="openDeleteModal"
+                :goal="goal"
+              >
+              </GoalComponent>
+            </div>
           </div>
         </div>
       </div>

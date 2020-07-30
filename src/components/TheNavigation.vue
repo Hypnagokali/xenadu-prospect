@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <ul>
+  <div class="xenadu-nav top-bar">
+    <ul class="xenadu-nav__links menu">
       <li>
         <router-link :to="{name: 'Home'}">
           Hauptseite
@@ -9,30 +9,27 @@
       <template v-if="authenticated">
         <li>
           <router-link :to="{name: 'Routines'}">
-            Routinen
-          </router-link>
-        </li>
-        <li>
-          <router-link :to="{name: 'Missions'}">
-            Missionen
+            Routine - Spiegel
           </router-link>
         </li>
         <li>
           <router-link :to="{name: 'Goals'}">
-            Wochenziele
+            Ziele - Spiegel
+          </router-link>
+        </li>
+        <li>
+          <router-link :to="{name: 'MyDay'}">
+            Mein Tag
           </router-link>
         </li>
         <li>
           <router-link :to="{name: 'Dashboard'}">
-            Dashboard
+            Monitor
           </router-link>
         </li>
         <li>
-            <span class="info">{{ user.name }}</span>
-        </li>
-        <li>
           <a href="#" @click.prevent="logout">
-            Logout
+            {{ user.name }} - Logout
           </a>
         </li>
       </template>
@@ -76,17 +73,16 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.info {
-  font-size: smaller;
-}
 ul {
+  font-size: small;
   display: flex;
-  justify-content: space-around;
+  // justify-content: space-around;
   list-style-type: none;
   font-weight: bold;
+  width: 100%;
 }
 li {
-  margin: 0 50px;
+  margin: 0 1%;
 }
 li a {
   text-decoration: none;

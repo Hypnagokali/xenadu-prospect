@@ -1,0 +1,87 @@
+@import './_settings.scss';
+@import '../../node_modules/foundation-sites/scss/foundation.scss';
+@include foundation-everything;
+
+// $foundation-palette: (
+//   primary: #370470,
+//   secondary: #aaa1b5,
+//   tertiary: #4512AE,
+//   success: #A1B92E,
+//   warning: #FFF573,
+//   alert: #ff7373,
+// );
+
+body, html {
+    background-color: get-color(primary);
+    color: $white;
+}
+
+label {
+    color: $white;
+}
+
+.xenadu-header {
+    background-color: get-color(primary);
+}
+
+.xenadu-view-subheader {
+    text-align: center;
+}
+
+.xenadu-view-content {
+    text-align: center;
+}
+
+.xenadu-view-header {
+
+}
+
+.xenadu-header h1 {
+    letter-spacing: 1vw;
+    margin: 2%;
+    margin-bottom: 0;
+}
+
+.xenadu-container {
+    color: $white;
+    background-color: get-color(primary);
+    margin: 0 auto;
+    width: 80vw;
+    min-height: 60vh;
+}
+
+.xenadu-nav {
+    color: $white;
+    background-color: get-color(primary);
+}
+
+.xenadu-nav__links {
+    padding-left: 2vw;;
+}
+
+.xenadu-nav a {
+    color: get-color(secondary);
+}
+.xenadu-nav a:hover {
+    color: get-color(warning);
+}
+
+.xenadu-menu a {
+    color: get-color(secondary);
+}
+.xenadu-menu a:hover {
+    color: get-color(warning);
+}
+
+.xenadu-load-animation {
+    text-align: center;
+}
+
+.xenadu-action {
+    background-color: get-color(action);
+    border-radius: 15px;
+}
+
+// .xenadu-action:hover {
+//     background-color: lighten(get-color(action), 50%);
+// }

@@ -1,4 +1,6 @@
-import '../node_modules/foundation-sites/dist/css/foundation.css';
+// import '../node_modules/foundation-sites/dist/css/foundation.css';
+import '@/style/main.scss';
+import '@/style/foundation-icons/foundation-icons.css';
 import Vue from 'vue';
 import axios from 'axios';
 import App from './App.vue';

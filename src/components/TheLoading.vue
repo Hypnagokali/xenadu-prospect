@@ -1,8 +1,8 @@
 <template>
   <div class="waiting">
-    <span v-if="isWaitingForResponse">
-      <img src="@/assets/loading_dots.gif" width="50">
-    </span>
+    <div class="xenadu-load-animation" v-if="isWaitingForResponse">
+      <img src="@/assets/my_loading_dots_2.gif" width="50">
+    </div>
   </div>
 </template>
 

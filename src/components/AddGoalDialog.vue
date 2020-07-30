@@ -10,9 +10,9 @@
       <div v-if="isSuccess" class="callout success">
         <h5>{{ onSuccess }}</h5>
       </div>
-      <div v-if="isLoading">
-        <img src="@/assets/loadring.gif">
-      </div>
+          <div class="xenadu-load-animation" v-if="isLoading">
+            <img src="@/assets/loadring.gif">
+          </div>
         <div v-if="isLoading === false" class="input-form">
           <input v-model="form.name" type="text" name="name" placeholder="Name des Ziels ...">
           <input

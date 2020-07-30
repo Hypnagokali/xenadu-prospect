@@ -1,19 +1,33 @@
 <template>
   <div class="goal-wrapper card">
     <div class="menu-edit">
-        <button class="button alert tiny float-right" @click.prevent="deleteGoal">Löschen</button>
-        <button class="button tiny float-right">Aufschieben</button>
-        <button class="button tiny float-right" @click.prevent="editGoal">Ändern</button>
-        <button class="button success tiny float-right">Erledigt</button>
+      <ul class="xenadu-menu menu align-center">
+      <li><a href="#"><span class="goal-menu goal-menu goal-menu-done fi-check"></span></a></li>
+      <li>
+        <a href="#" @click.prevent="editGoal">
+          <span class="goal-menu goal-menu-edit fi-pencil"></span>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <span class="goal-menu goal-menu-postpone fi-fast-forward"></span>
+        </a>
+      </li>
+      <li>
+        <a href="#" @click.prevent="deleteGoal">
+          <span class="goal-menu goal-menu-delete fi-x"></span>
+        </a>
+      </li>
+    </ul>
       </div>
     <div class="header card-divider">
       <div>
-        <h5>{{ goal.name }}</h5>
+        <h4>{{ goal.name }}</h4>
       </div>
     </div>
     <div class="card-section">
       <h5>{{ goal.description }}</h5>
-      <p>hinzugefügt am: {{ goal.addedOn }}</p>
+      <p>hinzugefügt am: <strong>{{ addedOnDateString }}</strong></p>
     </div>
     <div class="workload card-section">
       <span class="left">Belohnungspunkte:
@@ -49,8 +63,8 @@ export default {
     },
   },
   computed: {
-    addedOnDate() {
-      const date = new Date(this.addedOn);
+    addedOnDateString() {
+      const date = new Date(this.goal.addedOn);
       const options = {
         year: 'numeric',
         month: 'numeric',
@@ -70,36 +84,6 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-.goal-wrapper {
-  border: solid, 1px, #ccc;
-  margin: 0 auto;
-  margin-bottom: 2%;
-  width: 50%;
-}
-
-.card-divider {
-  border-bottom: solid 1px black;
-  background-color: #464378;
-  color: white;
-}
-.card-section {
-  background-color:#A49EFF;
-  color: black;
-}
-.progress {
-  height: 1.5em;
-}
-.progress-meter {
-  background-color: darkblue;
-  color: white;
-}
-
-button {
-  margin-bottom: 0;
-}
-
-.menu-edit {
-  background-color: #464378;
-}
+<style lang="scss">
+@import '@/style/goals.scss';
 </style>

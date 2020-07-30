@@ -1,0 +1,45 @@
+@import './main.scss';
+
+.goal-wrapper {
+    margin: 0 auto;
+    margin-bottom: 2%;
+    width: 80%;
+ }
+ 
+ .card-divider {
+   border-bottom: solid 1px black;
+   background-color: $light-gray;
+ }
+ .card-section {
+   background-color: $light-gray;
+   color: black;
+ }
+ .progress {
+   height: 1.5em;
+ }
+ .progress-meter {
+   background-color: black;
+   color: white;
+ }
+ 
+ button {
+   margin-bottom: 0;
+ }
+ 
+ .menu-edit {
+   background-color: $light-gray;
+ }
+
+ .goal-menu {
+     font-size: 1.5rem;
+     color: get-color(tertiary);
+ }
+
+
+.goal-menu-done {
+    color: get-color(success);
+}
+
+ .goal-menu-delete {
+    color: get-color(alert);
+ }

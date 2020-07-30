@@ -1,9 +1,9 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Missions from '@/views/missions/Missions.vue';
-import AddGoal from '@/views/missions/AddGoal.vue';
-import GoalMonitor from '@/views/missions/GoalMonitor.vue';
-import Routines from '@/views/Routines.vue';
+import AddGoal from '@/views/prospect/AddGoal.vue';
+import GoalMonitor from '@/views/prospect/GoalMonitor.vue';
+import Routines from '@/views/prospect/Routines.vue';
+import MyDay from '@/views/moment/MyDay.vue';
 import Home from '@/views/Home.vue';
 import Login from '@/views/Login.vue';
 import Dashboard from '@/views/Dashboard.vue';
@@ -33,7 +33,7 @@ const routes = [
     beforeEnter: hook,
   },
   {
-    path: '/routine-mirror',
+    path: '/prospect/routines',
     name: 'Routines',
     component: Routines,
     meta: {
@@ -42,16 +42,7 @@ const routes = [
     beforeEnter: hook,
   },
   {
-    path: '/missionboard',
-    name: 'Missions',
-    component: Missions,
-    meta: {
-      requiresAuth: true,
-    },
-    beforeEnter: hook,
-  },
-  {
-    path: '/missionboard/goals',
+    path: '/prospect/goals',
     name: 'Goals',
     component: GoalMonitor,
     meta: {
@@ -60,9 +51,18 @@ const routes = [
     beforeEnter: hook,
   },
   {
-    path: '/missionboard/goal/add',
+    path: '/prospect/goals/add',
     name: 'AddGoal',
     component: AddGoal,
+    meta: {
+      requiresAuth: true,
+    },
+    beforeEnter: hook,
+  },
+  {
+    path: '/moment/days',
+    name: 'MyDay',
+    component: MyDay,
     meta: {
       requiresAuth: true,
     },
