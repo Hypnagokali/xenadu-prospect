@@ -5,6 +5,7 @@
       <Navigation></Navigation>
     </div>
     <Loading></Loading>
+    <GlobalLoading v-if="isGlobalLoading"></GlobalLoading>
     <div class="xenadu-container grid-x grid-margin-x">
       <div class="cell medium-12 small-12">
         <router-view></router-view>
@@ -16,11 +17,18 @@
 <script>
 import Navigation from '@/components/TheNavigation.vue';
 import Loading from '@/components/TheLoading.vue';
+import GlobalLoading from '@/components/GlobalLoading.vue';
 
 export default {
   components: {
     Navigation,
     Loading,
+    GlobalLoading,
+  },
+  computed: {
+    isGlobalLoading() {
+      return this.$store.state.isLoading;
+    },
   },
 };
 </script>

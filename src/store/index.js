@@ -8,10 +8,13 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    //
+    isLoading: false,
   },
   mutations: {
-    //
+    TOGGLE_LOADING(state) {
+      state.isLoading = !state.isLoading;
+      console.log('ROOT: isLoading', state.isLoading);
+    },
   },
   actions: {
     //

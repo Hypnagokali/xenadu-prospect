@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="xenadu-form-content">
     <div class="goal-header">
       <h3>Ziel hinzufügen</h3>
     </div>
@@ -38,7 +38,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import XenaduWeekPicker from './utilities/XenaduWeekPicker.vue';
+import XenaduWeekPicker from '@/components/utilities/XenaduWeekPicker.vue';
 
 
 export default {
@@ -114,6 +114,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import '@/style/goals.scss';
 .goal-input {
   width: 50vh;
   margin: 0 auto;
