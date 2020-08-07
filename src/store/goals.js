@@ -6,14 +6,9 @@ import Goal from '../classes/Goal';
 
 export default {
   state: {
-    /*
-    * week, overdueSince, overview are the objects that store the whole response
-    * goals are the extracted goal data from the response.
-    */
-    overdue: {},
-    week: {},
-    overview: {},
-    /* the extracted goal data from one of the objects above. */
+    /* goalsCollection.week.date or goalsCollection.current.goals */
+    /* goalCollection.goalList */
+    goalsCollection: {},
     goals: [],
     errorMessages: null,
   },
@@ -23,12 +18,12 @@ export default {
   },
   mutations: {
     SET_OVERDUE(state, { date, goals }) {
-      state.overdue.date = date;
-      state.overdue.goals = goals;
+      state.goalsCollection.overdueSince.date = date;
+      state.goalsCollection.overdueSince.goals = goals;
     },
     SET_WEEK(state, { date, goals }) {
-      state.week.date = date;
-      state.week.goals = goals;
+      state.goalsCollection.week.date = date;
+      state.goalsCollection.week.goals = goals;
     },
     SET_STATE_DONE(state, goalObj) {
       const goal = state.goals.find((g) => g.id === goalObj.id);
