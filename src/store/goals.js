@@ -1,67 +1,128 @@
+// extern libraries
 import axios from 'axios';
-import snakeToCamelConverter from '@/helper/snakeToCamelConverter';
-import decodeHtmlSpecialChars from '@/helper/decodeHtmlspecialchars';
+// import _ from 'lodash';
+// classes
 import Goal from '../classes/Goal';
-import Week from '../classes/Week';
-import WorkloadPoints from '../classes/WorkloadPoints';
-
-// import Goal from '@/classes/Goal';
+import GoalsCollection from '../classes/GoalsCollection';
 
 export default {
   state: {
-    goals: [],
+    /* goalsCollections: an array of collections */
+    /* e.g.: goalsCollectionArray[0].goals */
+    goalsCollectionArray: [],
+    goalsCollection: new GoalsCollection(),
     errorMessages: null,
   },
+
   getters: {
     isInputInvalid: (state) => !!state.errorMessages,
-    goals: (state) => state.goals,
+    getGoalsCollectionArray: (state) => state.goalsCollectionArray,
+    getGoalsCollection: (state) => state.goalsCollection,
   },
+
   mutations: {
-    CLEAR_GOALS(state) {
-      state.goals = [];
+    SET_DONE(state, id) {
+      let goal = null;
+      state.goalsCollectionArray.forEach((goalsCollection) => {
+        /* using '!=' because: checking for null AND undefined. null == undefined */
+        if (goalsCollection.findById(id) != null) {
+          goal = goalsCollection.findById(id);
+        }
+      });
+      /* set the goal expressly to done, because otherwise vue is not updating the view */
+      if (goal !== null) {
+        goal.state = Goal.DONE;
+      }
     },
-    ADD_GOAL(state, goalObj) {
-      state.goals.push(goalObj);
+    CLEAR_COLLECTION(state) {
+      state.goalsCollectionArray = [];
     },
-    SET_GOAL(state, goalObj) {
-      state.goals = goalObj;
+    SET_COLLECTION(state, collection) {
+      state.goalsCollectionArray = collection;
     },
-    REPLACE_GOAL(state, goalObj) {
-      const replaceIndex = state.goals.findIndex((g) => g.id === goalObj.id);
-      state.goals[replaceIndex] = goalObj;
+    ADD_GOAL_TO_COLLECTION(state, { goal, collectionName }) {
+      const collection = state.goalsCollectionArray.find((c) => c.collectionName === `${collectionName}`);
+      collection.goals.push(goal);
     },
-    REMOVE_GOAL(state, id) {
-      // const removeIndex = state.goals.findIndex((g) => g.id === id);
-      const goalsWithoutRemovedItem = state.goals.filter((g) => g.id !== id);
-      console.log('REMOVE GOAL WITH FILTER');
-      console.log(goalsWithoutRemovedItem);
-      state.goals = goalsWithoutRemovedItem;
+    REPLACE_GOAL(state, goal) {
+      state.goalsCollectionArray.forEach((goalsCollection) => {
+        goalsCollection.update(goal);
+      });
+    },
+    REMOVE_GOAL(state, goal) {
+      state.goalsCollectionArray.forEach((goalCollection) => {
+        goalCollection.delete(goal);
+      });
     },
     SET_ERROR_MESSAGES(state, errObj) {
       state.errorMessages = errObj;
     },
   },
+
   actions: {
-    async delete({ commit }, myGoal) {
-      const { id } = myGoal;
-      await axios.post(`prospect/week/goal/${id}/delete`)
-        .then(() => {
-          commit('REMOVE_GOAL', id);
+    toggleStateDone({ commit }, goal) {
+      commit({ type: 'TOGGLE_LOADING' }, { options: { root: true } });
+      axios.post(`prospect/week/goal/${goal.id}/state/done`)
+        .then((response) => {
+          const goalObject = Goal.createGoalFromData(response.data);
+          commit('SET_DONE', goalObject.id);
         })
-        .catch((ex) => {
-          console.log(ex);
+        .catch((error) => {
+          console.log('Fehler bei setState');
+          console.log(error);
+        })
+        .finally(() => {
+          commit({ type: 'TOGGLE_LOADING' }, { options: { root: true } });
         });
     },
-    currentWeek({ dispatch, commit }) {
+
+    async delete({ commit }, goal) {
+      const { id } = goal;
+      await axios.post(`prospect/week/goal/${id}/delete`)
+        .then(() => {
+          commit('REMOVE_GOAL', goal);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
+    /* Get collection of goals by weekName (weekName = GoalCollection->name) */
+    week({ commit }, weekName = 'current') {
       return new Promise((resolve, reject) => {
-        axios.get('prospect/week/current/goals')
+        axios.get(`prospect/week/${weekName}/goals`)
           .then((response) => {
-            commit('CLEAR_GOALS');
-            console.log(response.data);
-            response.data.forEach((goalDataObject) => {
-              dispatch('createGoalFromData', { goalResponseData: goalDataObject });
-            });
-            resolve();
+            commit('CLEAR_COLLECTION');
+            const { collection } = response.data;
+
+            // create proper goal objects from response data
+            if (weekName === 'overview') {
+              const goalsCollections = collection.map((c) => {
+                const goalObjects = c.goals.map((g) => Goal.createGoalFromData(g));
+                const goalColl = new GoalsCollection(
+                  c.collectionName,
+                  c.date,
+                  goalObjects,
+                );
+                return goalColl;
+              });
+              commit('SET_COLLECTION', goalsCollections);
+              resolve(goalsCollections);
+            } else {
+              const goalObjects = collection[0].goals
+                .map((g) => Goal.createGoalFromData(g));
+
+              // create a GoalsCollection object
+              const goalColl = new GoalsCollection(
+                collection[0].collectionName,
+                collection[0].date,
+                goalObjects,
+              );
+              collection[0] = goalColl;
+
+              commit('SET_COLLECTION', collection);
+              resolve(collection);
+            }
           })
           .catch((error) => {
             reject(error);
@@ -69,25 +130,7 @@ export default {
       });
     },
 
-    createGoalFromData({ commit }, { goalResponseData, commitType = 'ADD_GOAL' }) {
-      const workloadPointsObject = new WorkloadPoints(
-        snakeToCamelConverter(goalResponseData.workloadPoints),
-      );
-      const weekObject = new Week(
-        snakeToCamelConverter(goalResponseData.week),
-      );
-      const goal = new Goal(
-        goalResponseData.id,
-        decodeHtmlSpecialChars(goalResponseData.description),
-        decodeHtmlSpecialChars(goalResponseData.name),
-        goalResponseData.addedOn,
-        weekObject,
-        workloadPointsObject,
-      );
-      commit(commitType, goal);
-    },
-
-    async update({ commit, dispatch }, goalInput) {
+    async update({ commit }, goalInput) {
       commit('SET_ERROR_MESSAGES', '');
 
       await axios.post(`prospect/week/goal/${goalInput.id}`, {
@@ -96,11 +139,8 @@ export default {
         cw: goalInput.cw,
         workload_level: goalInput.workloadLevel,
       }).then((response) => {
-        dispatch('createGoalFromData', {
-          goalResponseData: response.data,
-          commitType: 'REPLACE_GOAL',
-        });
-        console.log(response);
+        const goal = Goal.createGoalFromData(response.data);
+        commit('REPLACE_GOAL', goal);
       }).catch((error) => {
         if (error.response && error.response.status === 422) {
           commit('SET_ERROR_MESSAGES', error.response.data.errors);

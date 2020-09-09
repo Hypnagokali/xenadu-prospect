@@ -6,7 +6,7 @@
     <template v-slot:body>
       <div class="modal-delete-section">
         <p>Es werden auch alle Aufgaben, die diesem Ziel zugeordnet sind gelöscht.</p>
-        <p class="test">
+        <p class="delete-warning">
           trotzdem löschen?
         </p>
       </div>
@@ -52,6 +52,7 @@ export default {
       console.log('delete-modal: ', this.goal);
       this.delete(this.goal)
         .then(() => {
+          // this.$emit('delete-goal');
           this.$emit('closeWithMsg', 'Ziel gelöscht');
         })
         .catch()
@@ -65,8 +66,8 @@ export default {
 
 <style lang="scss" scoped>
 @use "sass:map";
-@import '../../node_modules/foundation-sites/scss/_global.scss';
-.test {
+@import '../../../node_modules/foundation-sites/scss/_global.scss';
+.delete-warning {
   background-color: map-get($foundation-palette, "warning" )
 }
 

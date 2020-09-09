@@ -72,14 +72,15 @@ $foundation-palette: (
   primary: #370470,
   secondary: #aaa1b5,
   tertiary: rgb(104, 114, 255),
+  quaternary: #c69fff,
   action: #9c27b0,
-  success: #A1B92E,
+  success: #9edca0,
   warning: #FFF573,
   alert: #ff7373,
 );
 $light-gray: #e6e6e6;
-$medium-gray: #cacaca;
-$dark-gray: #8a8a8a;
+$medium-gray: #817f7f;
+$dark-gray: #3d3d3d;
 $black: #0a0a0a;
 $white: #fefefe;
 $body-background: $white;
@@ -332,7 +333,7 @@ $buttongroup-radius-on-each: true;
 // -----------
 
 $callout-background: $white;
-$callout-background-fade: 85%;
+$callout-background-fade: 40%;
 $callout-border: 1px solid rgba($black, 0.25);
 $callout-margin: 0 0 1rem 0;
 $callout-sizes: (
@@ -343,7 +344,7 @@ $callout-sizes: (
 $callout-font-color: $body-font-color;
 $callout-font-color-alt: $body-background;
 $callout-radius: $global-radius;
-$callout-link-tint: 30%;
+$callout-link-tint: false;
 
 // 14. Card
 // --------

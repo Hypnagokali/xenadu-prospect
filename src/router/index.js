@@ -27,45 +27,30 @@ const routes = [
     path: '/dashboard',
     name: 'Dashboard',
     component: Dashboard,
-    meta: {
-      requiresAuth: true,
-    },
     beforeEnter: hook,
   },
   {
     path: '/prospect/routines',
     name: 'Routines',
     component: Routines,
-    meta: {
-      requiresAuth: true,
-    },
     beforeEnter: hook,
   },
   {
     path: '/prospect/goals',
     name: 'Goals',
     component: GoalMonitor,
-    meta: {
-      requiresAuth: true,
-    },
     beforeEnter: hook,
   },
   {
     path: '/prospect/goals/add',
     name: 'AddGoal',
     component: AddGoal,
-    meta: {
-      requiresAuth: true,
-    },
     beforeEnter: hook,
   },
   {
     path: '/moment/days',
     name: 'MyDay',
     component: MyDay,
-    meta: {
-      requiresAuth: true,
-    },
     beforeEnter: hook,
   },
 ];

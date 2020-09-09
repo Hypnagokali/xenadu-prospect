@@ -2,9 +2,10 @@
   <div>
     <div class="xenadu-view-header">
       <ul class="xenadu-menu menu align-center">
-        <li><a href="#" @click="loadCurrentWeek()">Diese Woche</a></li>
-        <li><a href="#">Nächste Woche</a></li>
-        <li><a href="#">Gesamtüberblick</a></li>
+        <li><a href="#" @click.prevent="loadUnfinished">Überfällig</a></li>
+        <li><a href="#" @click.prevent="loadCurrentWeek">Diese Woche</a></li>
+        <li><a href="#" @click.prevent="loadNextWeek">Nächste Woche</a></li>
+        <li><a href="#" @click.prevent="loadOverview">Gesamtüberblick</a></li>
       </ul>
     </div>
 
@@ -24,9 +25,6 @@
             <img src="@/assets/loadring.gif">
           </div>
           <div v-if="isLoading === false" class="goals">
-            <div v-if="goals.length < 1">
-              Noch keine Eintragungen
-            </div>
             <transition name="modal">
               <DeleteDialog
                 :goal="selectedGoal"
@@ -40,17 +38,16 @@
               <EditGoalDialog
               :goal="selectedGoal"
               @close="closeEditModal"
+              @update-goals="refreshGoals"
               v-if="showEditModal">
               </EditGoalDialog>
             </transition>
-            <div v-for="goal in goals" v-bind:key="goal.id">
-              <GoalComponent
-                @displayEditModal="openEditModal"
-                @displayDeleteModal="openDeleteModal"
-                :goal="goal"
-              >
-              </GoalComponent>
-            </div>
+            <GoalsCollectionWrapper
+              :collections="collectionArray"
+              @display-delete-modal="openDeleteModal"
+              @display-edit-modal="openEditModal"
+            >
+            </GoalsCollectionWrapper>
           </div>
         </div>
       </div>
@@ -59,56 +56,124 @@
 </template>
 
 <script>
-// import convertJsonKeysToCamelCase from '@/helper/snakeToCamelConverter';
-import dhsc from '@/helper/decodeHtmlspecialchars';
-import GoalComponent from '@/components/GoalComponent.vue';
-import EditGoalDialog from '@/components/EditGoalDialog.vue';
-import DeleteDialog from '@/components/DeleteDialog.vue';
+import EditGoalDialog from '@/components/goalComponents/EditGoalDialog.vue';
+import DeleteDialog from '@/components/goalComponents/DeleteDialog.vue';
+import GoalsCollectionWrapper from '@/components/goalComponents/GoalsCollectionWrapper.vue';
+
+// import GoalNames from '@/enum/GoalNames';
 
 import { mapActions, mapGetters } from 'vuex';
 
 export default {
   components: {
-    GoalComponent,
+    // GoalWrapper,
     EditGoalDialog,
     DeleteDialog,
+    GoalsCollectionWrapper,
+    // GoalOverviewWrapper,
   },
   data() {
     return {
-      testMuh: 'Muh data',
-      testFoo: 'Foo data',
+      nameOfChosenWeek: '',
       goals: [],
+      collectionArray: [],
+      /* Goal selected for deletion or edition */
       selectedGoal: {},
       isLoading: false,
       showEditModal: false,
       showDeleteModal: false,
+      goalOverviewObject: null,
     };
   },
   computed: {
     ...mapGetters({
-      getGoalsFromStore: 'goals',
+      goalsCollectionArray: 'getGoalsCollectionArray',
     }),
-    testValue() {
-      return dhsc('&amp;Sonst ist alles okay?');
-    },
   },
   methods: {
     ...mapActions([
-      'currentWeek',
+      'week',
+      'unfinished',
     ]),
+    refreshGoals() {
+      /*
+      * A workaround for updating the view
+      * Thats a fast soluton. I think, I can do better
+      */
+      this.collectionArray = [];
+      this.$nextTick(() => {
+        this.collectionArray = this.goalsCollectionArray;
+      });
+    },
     closeWithMsg(msg) {
       this.closeDeleteModal();
-      this.goals = this.getGoalsFromStore;
+      this.collectionArray = this.goalsCollectionArray;
       console.log(msg);
+    },
+    resetGoals() {
+      this.goalOverviewObject = null;
+      this.goals = [];
+      this.selectedGoal = {};
+    },
+    loadUnfinished() {
+      this.isLoading = true;
+      this.resetGoals();
+      this.week('overdue')
+        .then(() => {
+          this.collectionArray = this.goalsCollectionArray;
+        })
+        .catch((error) => {
+          if (error.response && error.response.status === 401) {
+            this.$router.push('Login');
+          } else {
+            console.error('irgendwas ist schiefgegangen', error);
+          }
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
+    },
+    loadOverview() {
+      this.isLoading = true;
+      this.resetGoals();
+      this.week('overview')
+        .then(() => {
+          this.collectionArray = this.goalsCollectionArray;
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
     },
     loadCurrentWeek() {
       this.isLoading = true;
-      console.log('load week');
-      this.currentWeek()
+      this.resetGoals();
+      this.week('current')
         .then(() => {
-          this.goals = this.getGoalsFromStore;
+          this.collectionArray = this.goalsCollectionArray;
         })
-        .catch()
+        .catch((error) => {
+          if (error.response && error.response.status === 401) {
+            this.$router.push('Login');
+          }
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
+    },
+    loadNextWeek() {
+      this.isLoading = true;
+      this.week('next')
+        .then(() => {
+          this.collectionArray = this.goalsCollectionArray;
+        })
+        .catch((error) => {
+          if (error.response && error.response.status === 401) {
+            this.$router.push('Login');
+          }
+        })
         .finally(() => {
           this.isLoading = false;
         });

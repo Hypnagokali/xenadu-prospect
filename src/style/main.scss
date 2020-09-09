@@ -36,6 +36,14 @@ label {
 
 }
 
+.xenadu-form-content {
+    color: $black;
+    background-color: get-color(quaternary);
+    padding: 5%;
+    border-radius: 8px;
+    min-height: 20vh;
+}
+
 .xenadu-header h1 {
     letter-spacing: 1vw;
     margin: 2%;

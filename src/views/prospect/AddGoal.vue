@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import AddGoalDialog from '@/components/AddGoalDialog.vue';
+import AddGoalDialog from '@/components/goalComponents/AddGoalDialog.vue';
 
 export default {
   name: 'AddGoal',

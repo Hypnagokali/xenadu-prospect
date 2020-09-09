@@ -6,6 +6,7 @@ export default {
   state: {
     token: null,
     user: null,
+    timeLoggedIn: null,
   },
 
   mutations: {
@@ -16,9 +17,14 @@ export default {
     SET_USER(state, userData) {
       state.user = userData;
     },
+
+    SET_TIME_LOGGED_IN(state, dateTime) {
+      state.timeLoggedIn = dateTime;
+    },
   },
 
   getters: {
+    getTimeLoggedIn: (state) => state.timeLoggedIn,
     getToken: (state) => state.token,
     getUser: (state) => state.user,
     isAuthenticated: (state) => state.token && state.user,
@@ -58,6 +64,7 @@ export default {
     destroyUser({ commit }) {
       commit('SET_TOKEN', null);
       commit('SET_USER', null);
+      commit('SET_TIME_LOGGED_IN', null);
     },
 
     async login({ dispatch }, credentials) {
@@ -71,25 +78,26 @@ export default {
       }
     },
 
-    async attempt({ commit, dispatch, state }, token) {
+    async attempt({ commit, dispatch }, token) {
       if (token) {
         commit('SET_TOKEN', token);
-      }
-
-      console.log(`state.token = ${state.token}`);
-      if (!state.token) {
-        console.log('Kein Token, kein Request');
+        commit('SET_TIME_LOGGED_IN', Date.now());
+      } else {
+        dispatch('destroyUser');
         return false;
       }
+      // console.log('ATTEMPT CALLED');
+      // console.log(`state.token = ${state.token}`);
+      // if (!state.token) {
+      //   console.log('Kein Token, kein Request');
+      //   return false;
+      // }
 
       try {
-        console.log('was ist hier los?');
         const response = await axios.get('/auth/me');
         commit('SET_USER', response.data);
-        // dispatch('saveToken', token);
         return true;
       } catch (e) {
-        // token abgelaufen oder ungültig
         dispatch('destroyUser');
         return false;
       }
@@ -99,6 +107,7 @@ export default {
       return axios.post('auth/logout').then(() => {
         commit('SET_TOKEN', null);
         commit('SET_USER', null);
+        commit('SET_TIME_LOGGED_IN', null);
       });
     },
   },
