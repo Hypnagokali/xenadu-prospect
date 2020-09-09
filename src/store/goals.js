@@ -3,68 +3,73 @@ import axios from 'axios';
 // import _ from 'lodash';
 // classes
 import Goal from '../classes/Goal';
+import GoalsCollection from '../classes/GoalsCollection';
 
 export default {
   state: {
-    /* goalsCollection.week.date or goalsCollection.current.goals */
-    /* goalCollection.goalList */
-    goalsCollection: {},
-    goals: [],
+    /* goalsCollections: an array of collections */
+    /* e.g.: goalsCollectionArray[0].goals */
+    goalsCollectionArray: [],
+    goalsCollection: new GoalsCollection(),
     errorMessages: null,
   },
+
   getters: {
     isInputInvalid: (state) => !!state.errorMessages,
-    goals: (state) => state.goals,
+    getGoalsCollectionArray: (state) => state.goalsCollectionArray,
+    getGoalsCollection: (state) => state.goalsCollection,
   },
+
   mutations: {
-    SET_OVERDUE(state, { date, goals }) {
-      state.goalsCollection.overdueSince.date = date;
-      state.goalsCollection.overdueSince.goals = goals;
+    SET_DONE(state, id) {
+      let goal = null;
+      state.goalsCollectionArray.forEach((goalsCollection) => {
+        /* using '!=' because: checking for null AND undefined. null == undefined */
+        if (goalsCollection.findById(id) != null) {
+          goal = goalsCollection.findById(id);
+        }
+      });
+      /* set the goal expressly to done, because otherwise vue is not updating the view */
+      if (goal !== null) {
+        goal.state = Goal.DONE;
+      }
     },
-    SET_WEEK(state, { date, goals }) {
-      state.goalsCollection.week.date = date;
-      state.goalsCollection.week.goals = goals;
+    CLEAR_COLLECTION(state) {
+      state.goalsCollectionArray = [];
     },
-    SET_STATE_DONE(state, goalObj) {
-      const goal = state.goals.find((g) => g.id === goalObj.id);
-      goal.state = goalObj.state;
+    SET_COLLECTION(state, collection) {
+      state.goalsCollectionArray = collection;
     },
-    CLEAR_GOALS(state) {
-      state.goals = [];
+    ADD_GOAL_TO_COLLECTION(state, { goal, collectionName }) {
+      const collection = state.goalsCollectionArray.find((c) => c.collectionName === `${collectionName}`);
+      collection.goals.push(goal);
     },
-    ADD_GOAL(state, goalObj) {
-      state.goals.push(goalObj);
+    REPLACE_GOAL(state, goal) {
+      state.goalsCollectionArray.forEach((goalsCollection) => {
+        goalsCollection.update(goal);
+      });
     },
-    SET_GOALS(state, goalObjects) {
-      state.goals = goalObjects;
-    },
-    REPLACE_GOAL(state, goalObj) {
-      const replaceIndex = state.goals.findIndex((g) => g.id === goalObj.id);
-      console.log('REPLACE GOAL:');
-      console.log('state.goals[replaceIndex]', state.goals[replaceIndex]);
-      state.goals[replaceIndex] = goalObj;
-      console.log('after:', state.goals[replaceIndex]);
-    },
-    REMOVE_GOAL(state, id) {
-      // const removeIndex = state.goals.findIndex((g) => g.id === id);
-      const goalsWithoutRemovedItem = state.goals.filter((g) => g.id !== id);
-      state.goals = goalsWithoutRemovedItem;
+    REMOVE_GOAL(state, goal) {
+      state.goalsCollectionArray.forEach((goalCollection) => {
+        goalCollection.delete(goal);
+      });
     },
     SET_ERROR_MESSAGES(state, errObj) {
       state.errorMessages = errObj;
     },
   },
+
   actions: {
     toggleStateDone({ commit }, goal) {
       commit({ type: 'TOGGLE_LOADING' }, { options: { root: true } });
       axios.post(`prospect/week/goal/${goal.id}/state/done`)
         .then((response) => {
           const goalObject = Goal.createGoalFromData(response.data);
-          commit('SET_STATE_DONE', goalObject);
+          commit('SET_DONE', goalObject.id);
         })
-        .catch((ex) => {
+        .catch((error) => {
           console.log('Fehler bei setState');
-          console.log(ex);
+          console.log(error);
         })
         .finally(() => {
           commit({ type: 'TOGGLE_LOADING' }, { options: { root: true } });
@@ -75,49 +80,49 @@ export default {
       const { id } = goal;
       await axios.post(`prospect/week/goal/${id}/delete`)
         .then(() => {
-          commit('REMOVE_GOAL', id);
+          commit('REMOVE_GOAL', goal);
         })
         .catch((error) => {
           console.log(error);
         });
     },
 
+    /* Get collection of goals by weekName (weekName = GoalCollection->name) */
     week({ commit }, weekName = 'current') {
       return new Promise((resolve, reject) => {
         axios.get(`prospect/week/${weekName}/goals`)
           .then((response) => {
-            commit('CLEAR_GOALS');
+            commit('CLEAR_COLLECTION');
+            const { collection } = response.data;
+
             // create proper goal objects from response data
             if (weekName === 'overview') {
-              console.log(response.data);
-              // todo
+              const goalsCollections = collection.map((c) => {
+                const goalObjects = c.goals.map((g) => Goal.createGoalFromData(g));
+                const goalColl = new GoalsCollection(
+                  c.collectionName,
+                  c.date,
+                  goalObjects,
+                );
+                return goalColl;
+              });
+              commit('SET_COLLECTION', goalsCollections);
+              resolve(goalsCollections);
             } else {
-              console.log('CURRENT REQUESTED');
-              console.log(response.data);
-              const goalObjects = response.data.week.goals
-                .map((goalData) => Goal.createGoalFromData(goalData));
-              commit('SET_GOALS', goalObjects);
-              commit('SET_WEEK', { date: response.data.week.date, goals: goalObjects });
-              resolve();
-            }
-          })
-          .catch((error) => {
-            reject(error);
-          });
-      });
-    },
+              const goalObjects = collection[0].goals
+                .map((g) => Goal.createGoalFromData(g));
 
-    unfinished({ commit }) {
-      return new Promise((resolve, reject) => {
-        axios.get('prospect/week/overdue/goals')
-          .then((response) => {
-            commit('CLEAR_GOALS');
-            console.log(response.data);
-            const goalObjects = response
-              .data.overdueSince.goals.map((goalData) => Goal.createGoalFromData(goalData));
-            commit('SET_GOALS', goalObjects);
-            commit('SET_OVERDUE', { date: response.data.overdueSince.date, goals: goalObjects });
-            resolve();
+              // create a GoalsCollection object
+              const goalColl = new GoalsCollection(
+                collection[0].collectionName,
+                collection[0].date,
+                goalObjects,
+              );
+              collection[0] = goalColl;
+
+              commit('SET_COLLECTION', collection);
+              resolve(collection);
+            }
           })
           .catch((error) => {
             reject(error);
@@ -134,9 +139,8 @@ export default {
         cw: goalInput.cw,
         workload_level: goalInput.workloadLevel,
       }).then((response) => {
-        const goalObjects = response.data.week.goals.map((g) => Goal.createGoalFromData(g));
-        commit('SET_GOALS', goalObjects);
-        commit('SET_WEEK', { date: response.data.week.date, goals: goalObjects });
+        const goal = Goal.createGoalFromData(response.data);
+        commit('REPLACE_GOAL', goal);
       }).catch((error) => {
         if (error.response && error.response.status === 422) {
           commit('SET_ERROR_MESSAGES', error.response.data.errors);

@@ -32,7 +32,10 @@
           <div class="medium-2 medium-offset-2 small-12 cell">
             <label>
               Kalenderwoche
-              <input type="number" v-model="form.cw">
+              <span data-tooltip tabindex="1" title="Ziel aufschieben benutzen, um KW zu ändern">
+                <input type="number" v-model="form.cw" readonly>
+              </span>
+
             </label>
           </div>
           <div class="medium-6 small-12 cell">
@@ -141,6 +144,7 @@ export default {
         .then(() => {
           if (!this.isInputInvalid) {
             this.isSuccess = true;
+            this.$emit('update-goals');
           }
         })
         .catch((e) => {
@@ -149,13 +153,6 @@ export default {
         .finally(() => {
           this.loading = false;
         });
-    },
-    getValue() {
-      console.log('triggered', 'muh');
-    },
-    test() {
-      console.log('TEST');
-      console.log(this.name);
     },
   },
 };

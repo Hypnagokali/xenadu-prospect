@@ -107,10 +107,10 @@ export default {
       this.toggleStateDone(this.goal);
     },
     editGoal() {
-      this.$emit('displayEditModal', this.goal);
+      this.$emit('display-edit-modal', this.goal);
     },
     deleteGoal() {
-      this.$emit('displayDeleteModal', this.goal);
+      this.$emit('display-delete-modal', this.goal);
     },
   },
 };

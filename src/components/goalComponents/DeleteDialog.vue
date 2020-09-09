@@ -52,6 +52,7 @@ export default {
       console.log('delete-modal: ', this.goal);
       this.delete(this.goal)
         .then(() => {
+          // this.$emit('delete-goal');
           this.$emit('closeWithMsg', 'Ziel gelöscht');
         })
         .catch()

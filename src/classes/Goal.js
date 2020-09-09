@@ -25,6 +25,11 @@ export default class Goal {
   }
 }
 
+Goal.DONE = 'done';
+Goal.TODO = 'todo';
+Goal.POSTPONED = 'postponed';
+Goal.SCHEDULED = 'scheduled';
+
 Goal.createGoalFromData = (responseData) => {
   const workloadPointsObject = new WorkloadPoints(
     snakeToCamelConverter(responseData.workloadPoints),

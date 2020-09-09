@@ -24,8 +24,14 @@ export default {
     GoalComponent,
   },
   props: {
-    goals: Array,
-    weekName: String,
+    goalsCollection: Object,
+    // goals: Array,
+    // weekName: String,
+  },
+  computed: {
+    goals() {
+      return this.goalsCollection.goals;
+    },
   },
 };
 </script>

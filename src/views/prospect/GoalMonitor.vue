@@ -38,35 +38,16 @@
               <EditGoalDialog
               :goal="selectedGoal"
               @close="closeEditModal"
+              @update-goals="refreshGoals"
               v-if="showEditModal">
               </EditGoalDialog>
             </transition>
-            <div v-if="goalOverviewObject === null">
-              <GoalWrapper
-                :goals="goals"
-                :weekName="nameOfChosenWeek"
-                @displayDeleteModal="openDeleteModal"
-                @displayEditModal="openEditModal"
-              >
-              </GoalWrapper>
-            </div>
-            <!--
-            <div v-for="goal in goals" v-bind:key="goal.id">
-              <GoalComponent
-                @displayEditModal="openEditModal"
-                @displayDeleteModal="openDeleteModal"
-                :goal="goal"
-              >
-              </GoalComponent>
-            </div>
-            -->
-            <div v-if="goalOverviewObject !== null">
-              <GoalOverviewWrapper
-                :goalOverviewObject="goalOverviewObject"
-                @displayDeleteModal="openDeleteModal"
-              >
-              </GoalOverviewWrapper>
-            </div>
+            <GoalsCollectionWrapper
+              :collections="collectionArray"
+              @display-delete-modal="openDeleteModal"
+              @display-edit-modal="openEditModal"
+            >
+            </GoalsCollectionWrapper>
           </div>
         </div>
       </div>
@@ -75,29 +56,28 @@
 </template>
 
 <script>
-// import convertJsonKeysToCamelCase from '@/helper/snakeToCamelConverter';
-// import dhsc from '@/helper/decodeHtmlspecialchars';
-// import GoalComponent from '@/components/goalComponents/GoalComponent.vue';
-import GoalWrapper from '@/components/goalComponents/GoalWrapper.vue';
 import EditGoalDialog from '@/components/goalComponents/EditGoalDialog.vue';
 import DeleteDialog from '@/components/goalComponents/DeleteDialog.vue';
-import GoalOverviewWrapper from '@/components/goalComponents/GoalOverviewWrapper.vue';
+import GoalsCollectionWrapper from '@/components/goalComponents/GoalsCollectionWrapper.vue';
 
-import GoalNames from '@/enum/GoalNames';
+// import GoalNames from '@/enum/GoalNames';
 
 import { mapActions, mapGetters } from 'vuex';
 
 export default {
   components: {
-    GoalWrapper,
+    // GoalWrapper,
     EditGoalDialog,
     DeleteDialog,
-    GoalOverviewWrapper,
+    GoalsCollectionWrapper,
+    // GoalOverviewWrapper,
   },
   data() {
     return {
       nameOfChosenWeek: '',
       goals: [],
+      collectionArray: [],
+      /* Goal selected for deletion or edition */
       selectedGoal: {},
       isLoading: false,
       showEditModal: false,
@@ -107,7 +87,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getGoalsFromStore: 'goals',
+      goalsCollectionArray: 'getGoalsCollectionArray',
     }),
   },
   methods: {
@@ -115,9 +95,19 @@ export default {
       'week',
       'unfinished',
     ]),
+    refreshGoals() {
+      /*
+      * A workaround for updating the view
+      * Thats a fast soluton. I think, I can do better
+      */
+      this.collectionArray = [];
+      this.$nextTick(() => {
+        this.collectionArray = this.goalsCollectionArray;
+      });
+    },
     closeWithMsg(msg) {
       this.closeDeleteModal();
-      this.goals = this.getGoalsFromStore;
+      this.collectionArray = this.goalsCollectionArray;
       console.log(msg);
     },
     resetGoals() {
@@ -128,10 +118,9 @@ export default {
     loadUnfinished() {
       this.isLoading = true;
       this.resetGoals();
-      this.unfinished()
+      this.week('overdue')
         .then(() => {
-          this.goals = this.getGoalsFromStore;
-          this.nameOfChosenWeek = GoalNames.unfinished;
+          this.collectionArray = this.goalsCollectionArray;
         })
         .catch((error) => {
           if (error.response && error.response.status === 401) {
@@ -148,9 +137,8 @@ export default {
       this.isLoading = true;
       this.resetGoals();
       this.week('overview')
-        .then((result) => {
-          console.log('FUNZT! Weiter machen :)');
-          this.goalOverviewObject = result;
+        .then(() => {
+          this.collectionArray = this.goalsCollectionArray;
         })
         .catch((error) => {
           console.log(error);
@@ -164,8 +152,7 @@ export default {
       this.resetGoals();
       this.week('current')
         .then(() => {
-          this.goals = this.getGoalsFromStore;
-          this.nameOfChosenWeek = GoalNames.current;
+          this.collectionArray = this.goalsCollectionArray;
         })
         .catch((error) => {
           if (error.response && error.response.status === 401) {
@@ -180,8 +167,7 @@ export default {
       this.isLoading = true;
       this.week('next')
         .then(() => {
-          this.goals = this.getGoalsFromStore;
-          this.nameOfChosenWeek = GoalNames.next;
+          this.collectionArray = this.goalsCollectionArray;
         })
         .catch((error) => {
           if (error.response && error.response.status === 401) {
