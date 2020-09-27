@@ -7,6 +7,8 @@
  }
  
  .card-divider {
+   background-color: get-color(secondary);
+   color: $light-gray;
    border-bottom: solid 1px black;
  }
  .card-section {
@@ -25,12 +27,13 @@
  }
  
  .menu-edit {
-   background-color: $light-gray;
+  // background-color: $white; 
+  background-color: get-color(quaternary);
  }
 
  .goal-menu {
      font-size: 1.5rem;
-     color: get-color(tertiary);
+     color: $black;
  }
 
 .goal-menu-done {

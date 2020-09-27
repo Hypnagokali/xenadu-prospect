@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import auth from './auth';
 import goals from './goals';
+import friends from './friends';
 import requestState from './request-state';
 
 Vue.use(Vuex);
@@ -23,5 +24,6 @@ export default new Vuex.Store({
     requestState,
     auth,
     goals,
+    friends,
   },
 });

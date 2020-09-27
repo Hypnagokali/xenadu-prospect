@@ -69,14 +69,15 @@ $global-font-size: 100%;
 $global-width: rem-calc(1200);
 $global-lineheight: 1.5;
 $foundation-palette: (
-  primary: #370470,
-  secondary: #aaa1b5,
-  tertiary: rgb(104, 114, 255),
-  quaternary: #c69fff,
+  primary: #dedede,
+  secondary: #2e0f65,
+  tertiary: #2e0f65,
+  quaternary: #523194,
   action: #9c27b0,
   success: #9edca0,
   warning: #FFF573,
-  alert: #ff7373,
+  alert: #ff5a5a,
+  // alert: #ff7373,
 );
 $light-gray: #e6e6e6;
 $medium-gray: #817f7f;

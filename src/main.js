@@ -8,7 +8,30 @@ import store from './store';
 
 require('@/store/subscribers');
 
+/* Environment */
 axios.defaults.baseURL = 'http://localhost/xenadu/xenadu-backend/api';
+
+
+// axios.interceptors.request.use((request) => {
+
+// });
+
+// check for the `Authorization` header in each response - refresh on frontend if found
+axios.interceptors.response.use((response) => {
+  const { headers } = response;
+  const newToken = headers['refresh-token'];
+  console.log('INTERCEPTOR: Is there a new token in the headers?', headers);
+  if (newToken !== undefined) {
+    console.log('NEW TOKEN FROM HEADERS (refresh-token):', newToken); // 'Bearer: ey0dikeidal...'
+    axios.defaults.headers.common.Authorization = `Bearer ${newToken}`;
+    localStorage.setItem('token', newToken);
+    localStorage.setItem('token_ts', Date.now());
+    const muh = newToken.substring(newToken.length - 5);
+    console.log('Neuer Token endet mit:', muh);
+  }
+
+  return response;
+});
 
 store.dispatch('auth/attempt', localStorage.getItem('token')).then(() => {
   Vue.config.productionTip = false;

@@ -103,8 +103,12 @@ export default {
       }
     },
 
-    logout({ commit }) {
-      return axios.post('auth/logout').then(() => {
+    // async refreshToken({ commit }, oldToken) {
+    //   axios.post();
+    // }
+
+    async logout({ commit }) {
+      await axios.post('auth/logout').then(() => {
         commit('SET_TOKEN', null);
         commit('SET_USER', null);
         commit('SET_TIME_LOGGED_IN', null);

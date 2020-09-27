@@ -12,12 +12,64 @@
 // );
 
 body, html {
-    background-color: get-color(primary);
-    color: $white;
+    background-color: get-color(quaternary);
 }
 
-label {
+html {
+    height: 100%;
+}
+body {
+    height: 100%;
+}
+
+.header {
+    background-color: get-color(secondary);
+    padding-left: 4%;
+    padding-right: 4%;
+    padding-top: 2%;
+}
+
+.xenadu-title {
     color: $white;
+    letter-spacing: 0.4em;
+}
+
+.xenadu-logout {
+    margin-left: 15%;
+}
+
+.xenadu-content-wrapper {
+    background-color: get-color(primary);
+    padding: 4%;
+    padding-bottom: 10%;
+    min-height: 640px;
+}
+
+.footer {
+    margin-top: 5%;
+    min-height: 100px;
+    // background-color: get-color(quaternary);
+    color: white;
+}
+
+.footer span {
+    margin-left: 10%;
+}
+
+// label {
+//     color: $white;
+// }
+
+a {
+    color: get-color(secondary);
+}
+
+.content {
+    min-width: 65%;
+}
+
+.xenadu-view-content {
+    text-align: center;
 }
 
 .xenadu-header {
@@ -28,20 +80,15 @@ label {
     text-align: center;
 }
 
-.xenadu-view-content {
-    text-align: center;
-}
-
-.xenadu-view-header {
-
-}
-
 .xenadu-form-content {
+    text-align: center;
     color: $black;
-    background-color: get-color(quaternary);
-    padding: 5%;
+    //background-color: #673AB7;
+    background-color: get-color(primary);
+    padding: 2% 8% 2% 8%;
     border-radius: 8px;
     min-height: 20vh;
+    margin: 0 auto;
 }
 
 .xenadu-header h1 {
@@ -53,18 +100,23 @@ label {
 .xenadu-container {
     color: $white;
     background-color: get-color(primary);
-    margin: 0 auto;
-    width: 80vw;
     min-height: 60vh;
 }
 
+.waiting {
+    background-color: get-color(secondary);
+}
+
+.xenadu-form-input {
+    text-align: center;
+}
+
 .xenadu-nav {
-    color: $white;
-    background-color: get-color(primary);
+    color: $black;
 }
 
 .xenadu-nav__links {
-    padding-left: 2vw;;
+    padding-left: 2vw;
 }
 
 .xenadu-nav a {
@@ -75,10 +127,10 @@ label {
 }
 
 .xenadu-menu a {
-    color: get-color(secondary);
+    color: $black;
 }
 .xenadu-menu a:hover {
-    color: get-color(warning);
+    color: $medium-gray;
 }
 
 .xenadu-load-animation {

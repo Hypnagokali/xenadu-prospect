@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h4>Wähle eine Woche:</h4>
     <select v-bind:value="value" @input="$emit('input', $event.target.value)">
       <option value="0">Diese Woche</option>
       <option value="1">Nächste Woche</option>

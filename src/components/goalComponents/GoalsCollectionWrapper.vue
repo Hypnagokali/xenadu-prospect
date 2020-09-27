@@ -8,9 +8,17 @@
         Noch keine Eintragungen
       </div>
       <div v-for="goal in collection.goals" v-bind:key="goal.id">
-        <GoalComponent
+        <GoalComponent v-if="collection.name === 'overdue'"
           @display-delete-modal="$emit('display-delete-modal', goal)"
           @display-edit-modal="$emit('display-edit-modal', goal)"
+          :goal="goal"
+          :overdue="true"
+        >
+        </GoalComponent>
+        <GoalComponent v-else
+          @display-delete-modal="$emit('display-delete-modal', goal)"
+          @display-edit-modal="$emit('display-edit-modal', goal)"
+          @display-postpone-modal="$emit('display-postpone-modal', goal)"
           :goal="goal"
         >
         </GoalComponent>

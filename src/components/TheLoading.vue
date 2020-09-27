@@ -1,5 +1,5 @@
 <template>
-  <div class="waiting">
+  <div class="waiting xenadu-nav">
     <div class="xenadu-load-animation" v-if="isWaitingForResponse">
       <img src="@/assets/my_loading_dots_2.gif" width="50">
     </div>

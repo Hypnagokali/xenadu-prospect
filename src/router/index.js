@@ -2,11 +2,16 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import AddGoal from '@/views/prospect/AddGoal.vue';
 import GoalMonitor from '@/views/prospect/GoalMonitor.vue';
-import Routines from '@/views/prospect/Routines.vue';
-import MyDay from '@/views/moment/MyDay.vue';
 import Home from '@/views/Home.vue';
 import Login from '@/views/Login.vue';
-import Dashboard from '@/views/Dashboard.vue';
+
+import MeMenu from '@/views/menu/MeMenu.vue';
+import MonitorMenu from '@/views/menu/MonitorMenu.vue';
+
+import FriendView from '@/views/monitor/FriendView.vue';
+import FriendMenu from '@/views/menu/FriendMenu.vue';
+
+// check auth hook
 import hook from './beforeEnterHook';
 
 
@@ -16,7 +21,20 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home,
+    components: {
+      default: Home,
+      menu: MeMenu,
+    },
+    beforeEnter: hook,
+  },
+  {
+    path: '/prospect/monitors',
+    name: 'Monitor',
+    components: {
+      default: GoalMonitor,
+      menu: MonitorMenu,
+    },
+    beforeEnter: hook,
   },
   {
     path: '/login',
@@ -24,33 +42,30 @@ const routes = [
     component: Login,
   },
   {
-    path: '/dashboard',
-    name: 'Dashboard',
-    component: Dashboard,
-    beforeEnter: hook,
-  },
-  {
-    path: '/prospect/routines',
-    name: 'Routines',
-    component: Routines,
-    beforeEnter: hook,
-  },
-  {
     path: '/prospect/goals',
     name: 'Goals',
-    component: GoalMonitor,
+    components: {
+      default: GoalMonitor,
+      menu: MonitorMenu,
+    },
     beforeEnter: hook,
   },
   {
     path: '/prospect/goals/add',
     name: 'AddGoal',
-    component: AddGoal,
+    components: {
+      default: AddGoal,
+      menu: MonitorMenu,
+    },
     beforeEnter: hook,
   },
   {
-    path: '/moment/days',
-    name: 'MyDay',
-    component: MyDay,
+    path: '/monitor/:id',
+    name: 'FriendView',
+    components: {
+      default: FriendView,
+      menu: FriendMenu,
+    },
     beforeEnter: hook,
   },
 ];

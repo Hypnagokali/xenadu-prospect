@@ -4,22 +4,37 @@
       <ul class="xenadu-menu menu align-center">
       <li>
         <a href="#" @click.prevent="toggleDone">
-          <span class="goal-menu goal-menu goal-menu-done fi-check"></span>
+          <span data-tooltip tabindex="1" title="Ziel als erledigt markieren">
+            <span class="goal-menu goal-menu goal-menu-done fi-check"></span>
+          </span>
           </a>
       </li>
       <li>
         <a href="#" @click.prevent="editGoal">
-          <span class="goal-menu goal-menu-edit fi-pencil"></span>
+          <span data-tooltip tabindex="1" title="Ziel bearbeiten">
+            <span class="goal-menu goal-menu-edit fi-pencil"></span>
+          </span>
+        </a>
+      </li>
+      <li v-if="!overdue">
+        <a href="#" @click.prevent="postponeGoal">
+          <span data-tooltip tabindex="1" title="Ziel verschieben">
+            <span class="goal-menu goal-menu-postpone fi-fast-forward"></span>
+          </span>
         </a>
       </li>
       <li>
         <a href="#">
-          <span class="goal-menu goal-menu-postpone fi-fast-forward"></span>
+          <span data-tooltip tabindex="1" title="Ziel neu einplanen">
+            <span class="goal-menu goal-menu-postpone fi-arrows-in"></span>
+          </span>
         </a>
       </li>
       <li>
         <a href="#" @click.prevent="deleteGoal">
-          <span class="goal-menu goal-menu-delete fi-x"></span>
+          <span data-tooltip tabindex="1" title="Ziel löschen">
+            <span class="goal-menu goal-menu-delete fi-x"></span>
+          </span>
         </a>
       </li>
     </ul>
@@ -66,6 +81,10 @@ export default {
       Goal,
       required: true,
     },
+    overdue: {
+      Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -111,6 +130,10 @@ export default {
     },
     deleteGoal() {
       this.$emit('display-delete-modal', this.goal);
+    },
+    postponeGoal() {
+      console.log('postpone', this.goal);
+      this.$emit('display-postpone-modal', this.goal);
     },
   },
 };

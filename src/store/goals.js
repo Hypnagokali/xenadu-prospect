@@ -24,6 +24,7 @@ export default {
     SET_DONE(state, id) {
       let goal = null;
       state.goalsCollectionArray.forEach((goalsCollection) => {
+        console.log('TRY: setDone', id);
         /* using '!=' because: checking for null AND undefined. null == undefined */
         if (goalsCollection.findById(id) != null) {
           goal = goalsCollection.findById(id);
@@ -60,6 +61,20 @@ export default {
   },
 
   actions: {
+    postpone({ commit }, goal) {
+      // console.log('goal workload:', goal.workloadPoints.level);
+      return axios.post(`prospect/week/goal/${goal.id}`, {
+        name: goal.name,
+        cw: goal.week.cw,
+        workload_level: goal.workloadPoints.level,
+        description: goal.description,
+      }).then((response) => {
+        console.log('Antwort vom Server:', response.data);
+        commit('REMOVE_GOAL', Goal.createGoalFromData(response.data));
+      }).catch((e) => {
+        console.log('Fehler', e);
+      });
+    },
     toggleStateDone({ commit }, goal) {
       commit({ type: 'TOGGLE_LOADING' }, { options: { root: true } });
       axios.post(`prospect/week/goal/${goal.id}/state/done`)

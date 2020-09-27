@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="content">
     <div class="xenadu-view-header">
       <ul class="xenadu-menu menu align-center">
         <li><a href="#">Diese Woche</a></li>

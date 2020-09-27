@@ -1,27 +1,29 @@
 <template>
   <div id="app" class="xenadu-wrapper">
-    <Header></Header>
+    <div class="xenadu-header">
+      <h1>xenadu</h1>
+      <Navigation></Navigation>
+    </div>
     <Loading></Loading>
     <GlobalLoading v-if="isGlobalLoading"></GlobalLoading>
-    <Content></Content>
-    <Footer></Footer>
+    <div class="xenadu-container grid-x grid-margin-x">
+      <div class="cell medium-12 small-12">
+        <router-view></router-view>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import Header from '@/components/TheHeader.vue';
+import Navigation from '@/components/TheNavigation.vue';
 import Loading from '@/components/TheLoading.vue';
 import GlobalLoading from '@/components/GlobalLoading.vue';
-import Content from '@/components/TheContent.vue';
-import Footer from '@/components/TheFooter.vue';
 
 export default {
   components: {
-    Header,
+    Navigation,
     Loading,
     GlobalLoading,
-    Content,
-    Footer,
   },
   computed: {
     isGlobalLoading() {
