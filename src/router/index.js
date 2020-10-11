@@ -6,14 +6,16 @@ import Home from '@/views/Home.vue';
 import Login from '@/views/Login.vue';
 
 import MeMenu from '@/views/menu/MeMenu.vue';
-import MonitorMenu from '@/views/menu/MonitorMenu.vue';
+import MyMonitorMenu from '@/views/menu/MyMonitorMenu.vue';
 
-import FriendView from '@/views/monitor/FriendView.vue';
-import FriendMenu from '@/views/menu/FriendMenu.vue';
+import UserProfileView from '@/views/users/UserProfileView.vue';
+import UserMonitorMenu from '@/views/menu/UserMonitorMenu.vue';
+import UserList from '@/views/users/UserList.vue';
+
+import UserGoalMonitorView from '@/views/users/prospect/UserGoalMonitorView.vue';
 
 // check auth hook
 import hook from './beforeEnterHook';
-
 
 Vue.use(VueRouter);
 
@@ -32,7 +34,7 @@ const routes = [
     name: 'Monitor',
     components: {
       default: GoalMonitor,
-      menu: MonitorMenu,
+      menu: MyMonitorMenu,
     },
     beforeEnter: hook,
   },
@@ -46,7 +48,7 @@ const routes = [
     name: 'Goals',
     components: {
       default: GoalMonitor,
-      menu: MonitorMenu,
+      menu: MyMonitorMenu,
     },
     beforeEnter: hook,
   },
@@ -55,16 +57,34 @@ const routes = [
     name: 'AddGoal',
     components: {
       default: AddGoal,
-      menu: MonitorMenu,
+      menu: MyMonitorMenu,
     },
     beforeEnter: hook,
   },
   {
-    path: '/monitor/:id',
-    name: 'FriendView',
+    path: '/users',
+    name: 'UserList',
     components: {
-      default: FriendView,
-      menu: FriendMenu,
+      default: UserList,
+      menu: MyMonitorMenu,
+    },
+    beforeEnter: hook,
+  },
+  {
+    path: '/users/:id',
+    name: 'UserProfileView',
+    components: {
+      default: UserProfileView,
+      menu: UserMonitorMenu,
+    },
+    beforeEnter: hook,
+  },
+  {
+    path: '/users/:id/prospect/goals',
+    name: 'UserGoalMonitorView',
+    components: {
+      default: UserGoalMonitorView,
+      menu: UserMonitorMenu,
     },
     beforeEnter: hook,
   },

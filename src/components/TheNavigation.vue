@@ -14,6 +14,11 @@
             </router-link>
           </li>
           <li>
+            <router-link :to="{name: 'UserList'}">
+              Alle Benutzer
+            </router-link>
+          </li>
+          <li>
             <a href="#" @click.prevent="logout">
               {{ user.name }} - Logout
             </a>

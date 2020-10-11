@@ -11,7 +11,7 @@
       </li>
       <li>
         <a href="#" @click.prevent="editGoal">
-          <span data-tooltip tabindex="1" title="Ziel bearbeiten">
+          <span data-tooltip tabindex="2" title="Ziel bearbeiten">
             <span class="goal-menu goal-menu-edit fi-pencil"></span>
           </span>
         </a>
@@ -23,10 +23,27 @@
           </span>
         </a>
       </li>
-      <li>
+      <li v-if="overdue" @click.prevent="scheduleGoal">
         <a href="#">
-          <span data-tooltip tabindex="1" title="Ziel neu einplanen">
+          <span data-tooltip tabindex="3" title="Ziel neu einplanen">
             <span class="goal-menu goal-menu-postpone fi-arrows-in"></span>
+          </span>
+        </a>
+      </li>
+      <li v-if="goal.isRegistered">
+        <a href="#">
+          <span
+            data-tooltip tabindex="4"
+            title="Ziel ist mit Monitor verbunden. Ziel vom Monitor entfernen"
+          >
+            <span class="goal-menu goal-menu-postpone fi-link"></span>
+          </span>
+        </a>
+      </li>
+      <li v-else>
+        <a href="#">
+          <span data-tooltip tabindex="4" title="Ziel zum Monitor hinzufügen">
+            <span class="goal-menu goal-menu-postpone fi-unlink"></span>
           </span>
         </a>
       </li>
@@ -122,6 +139,9 @@ export default {
     ...mapActions([
       'toggleStateDone',
     ]),
+    scheduleGoal() {
+      this.$emit('display-schedule-modal', this.goal);
+    },
     toggleDone() {
       this.toggleStateDone(this.goal);
     },

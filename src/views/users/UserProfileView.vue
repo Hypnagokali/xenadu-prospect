@@ -10,7 +10,7 @@
             <img src="@/assets/loadring.gif">
           </div>
           <div v-else>
-            <h3>Profil von {{ user.name }}</h3>
+            <h4>Profil von {{ user.name }}</h4>
             <transition name="fade">
                 <NotifyModal v-if="notify" @close="closeNotification">
                   <template v-slot:title>
@@ -22,22 +22,46 @@
                 </NotifyModal>
             </transition>
             <template v-if="isFriend">
-              <button @click="openNotification" class="button success">
+              <button
+                :disabled="isWaitingForResponse"
+                @click="openNotification"
+                class="button success"
+              >
                 Nachricht schreiben
               </button>
-              <button class="button alert">
+              <button
+                :disabled="isWaitingForResponse"
+                @click.prevent="endFriendship"
+                class="button alert"
+              >
                 Keine Freunde mehr
               </button>
             </template>
             <template v-else>
               <button
-                :disabled="isSendingRequest"
+                :disabled="isWaitingForResponse"
                 @click.prevent="requestForFriendship"
-                v-if="!isPending"
+                v-if="!isPending && !hasRequestedMe"
                 class="button success"
               >
                 Freundschaftsanfrage senden
               </button>
+              <template v-if="hasRequestedMe">
+                <button
+                  :disabled="isWaitingForResponse"
+                  @click.prevent="acceptPendingRequest"
+                  class="button success"
+                >
+                  Freundschaftsanfrage annehmen
+                </button>
+                <button
+                  :disabled="isWaitingForResponse"
+                  @click.prevent="denyPendingRequest"
+                  class="button alert"
+                >
+                  Freundschaftsanfrage ablehnen
+                </button>
+              </template>
               <button disabled v-if="isPending" class="button tertiary">
                 Freundschaftsanfrage gesendet
               </button>
@@ -71,12 +95,12 @@ export default {
         id: 0,
         name: '',
       },
-      isSendingRequest: false,
+      isWaitingForResponse: false,
       isLoading: false,
       notify: false,
       notification: {
         message: 'Freundschaftsanfrage gesendet',
-        title: 'Gesendet',
+        title: 'Mitteilung',
         style: '',
       },
     };
@@ -87,7 +111,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters('friends', ['isFriend', 'getUser', 'hasErrorMessage', 'getErrorMessage', 'isPending']),
+    ...mapGetters('friends', ['isFriend', 'getUser', 'hasErrorMessage', 'getErrorMessage', 'isPending', 'hasRequestedMe']),
     userId() {
       return this.$route.params.id;
     },
@@ -96,9 +120,54 @@ export default {
     ...mapActions({
       init: 'friends/initUserView',
       request: 'friends/sendFriendRequest',
+      deny: 'friends/denyFriendship',
+      accept: 'friends/acceptFriendship',
+      unfriend: 'friends/unfriend',
     }),
+    endFriendship() {
+      this.isWaitingForResponse = true;
+      this.unfriend(parseInt(this.userId, 10))
+        .then(() => {
+          this.openNotification(`Freundschaftsanfrage von ${this.user.name} beendet.`);
+          // this.isPending = true;
+        })
+        .catch(() => {
+          this.openNotification('Leider ist etwas schiefgegangen', true);
+        })
+        .finally(() => {
+          this.isWaitingForResponse = false;
+        });
+    },
+    denyPendingRequest() {
+      this.isWaitingForResponse = true;
+      this.deny(parseInt(this.userId, 10))
+        .then(() => {
+          this.openNotification(`Freundschaftsanfrage von ${this.user.name} abgelehnt.`);
+          // this.isPending = true;
+        })
+        .catch(() => {
+          this.openNotification('Leider ist etwas schiefgegangen', true);
+        })
+        .finally(() => {
+          this.isWaitingForResponse = false;
+        });
+    },
+    acceptPendingRequest() {
+      this.isWaitingForResponse = true;
+      this.accept(parseInt(this.userId, 10))
+        .then(() => {
+          this.openNotification(`Freundschaftsanfrage von ${this.user.name} angenommen.`);
+          // this.isPending = true;
+        })
+        .catch(() => {
+          this.openNotification('Leider ist etwas schiefgegangen', true);
+        })
+        .finally(() => {
+          this.isWaitingForResponse = false;
+        });
+    },
     requestForFriendship() {
-      this.isSendingRequest = true;
+      this.isWaitingForResponse = true;
       this.request(parseInt(this.userId, 10))
         .then(() => {
           this.openNotification(`Freundschaftsanfrage an ${this.user.name} gesendet.`);
@@ -108,7 +177,7 @@ export default {
           this.openNotification('Leider ist etwas schiefgegangen', true);
         })
         .finally(() => {
-          this.isSendingRequest = false;
+          this.isWaitingForResponse = false;
         });
     },
     openNotification(msg, isErrorMessage = false) {

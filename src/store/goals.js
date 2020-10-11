@@ -61,7 +61,7 @@ export default {
   },
 
   actions: {
-    postpone({ commit }, goal) {
+    async postpone({ commit }, goal) {
       // console.log('goal workload:', goal.workloadPoints.level);
       return axios.post(`prospect/week/goal/${goal.id}`, {
         name: goal.name,

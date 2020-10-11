@@ -60,7 +60,6 @@ import Goal from '@/classes/Goal';
 
 import { mapActions } from 'vuex';
 
-
 export default {
   name: 'PostponeGoalDialog',
   components: {

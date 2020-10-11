@@ -85,7 +85,6 @@
 import { mapActions, mapGetters } from 'vuex';
 import XenaduWeekPicker from '@/components/utilities/XenaduWeekPicker.vue';
 
-
 export default {
   name: 'AddGoalDialog',
   components: {

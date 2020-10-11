@@ -142,6 +142,11 @@ a {
     border-radius: 15px;
 }
 
+.mini-notification {
+    font-size: smaller;
+    color: get-color(action);
+}
+
 // .xenadu-action:hover {
 //     background-color: lighten(get-color(action), 50%);
 // }

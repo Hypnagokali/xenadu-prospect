@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import GoalNames from '@/enum/GoalNames';
+import GoalNames from '@/enum/WeekNames';
 import GoalWrapper from './GoalWrapper.vue';
 
 export default {

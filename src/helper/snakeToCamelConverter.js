@@ -4,7 +4,6 @@
  übernommen. Bei Gelegenheit mal analysieren :)
 */
 
-
 const toCamel = (s) => s.replace(/([_][a-z])/ig,
   ($1) => $1.toUpperCase().replace('_', ''));
 

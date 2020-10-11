@@ -11,7 +11,6 @@ require('@/store/subscribers');
 /* Environment */
 axios.defaults.baseURL = 'http://localhost/xenadu/xenadu-backend/api';
 
-
 // axios.interceptors.request.use((request) => {
 
 // });
