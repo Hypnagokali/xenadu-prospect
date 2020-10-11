@@ -11,6 +11,7 @@
         <GoalComponent v-if="collection.name === 'overdue'"
           @display-delete-modal="$emit('display-delete-modal', goal)"
           @display-edit-modal="$emit('display-edit-modal', goal)"
+          @display-schedule-modal="$emit('display-schedule-modal', goal)"
           :goal="goal"
           :overdue="true"
         >

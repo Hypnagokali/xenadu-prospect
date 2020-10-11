@@ -61,8 +61,25 @@ export default {
   },
 
   actions: {
+    async reschedule({ commit }, formInput) {
+      return axios.post(`prospect/week/goal/${formInput.id}`, {
+        name: formInput.name,
+        cw: formInput.cw,
+        workload_level: formInput.workloadLevel,
+        description: formInput.description,
+        reschedule: true,
+      }).then((response) => {
+        console.log('Antwort vom Server:', response.data);
+        commit('REMOVE_GOAL', Goal.createGoalFromData(response.data));
+      }).catch((e) => {
+        console.log('Fehler', e);
+      });
+    },
     async postpone({ commit }, goal) {
-      // console.log('goal workload:', goal.workloadPoints.level);
+      /*
+      * TODO:
+      * Use formInput not prop goal!
+      */
       return axios.post(`prospect/week/goal/${goal.id}`, {
         name: goal.name,
         cw: goal.week.cw,

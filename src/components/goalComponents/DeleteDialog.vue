@@ -4,16 +4,17 @@
       <h5>Ziel löschen</h5>
     </template>
     <template v-slot:body>
-      <div class="modal-delete-section">
+      <div class="modal-form-section">
+          <h4>{{goal.name}}</h4>
         <p>Es werden auch alle Aufgaben, die diesem Ziel zugeordnet sind gelöscht.</p>
-        <p class="delete-warning">
-          trotzdem löschen?
+        <p class="callout warning">
+          Soll das Ziel gelöscht werden?
         </p>
       </div>
     </template>
     <template v-slot:footer>
       <div v-if="isLoading">Wird gelöscht ...</div>
-      <button :disabled="isLoading" @click="deleteGoal" class="button alert">Do it!</button>
+      <button :disabled="isLoading" @click="deleteGoal" class="button alert">Löschen!</button>
     </template>
   </XenaduModal>
 </template>
@@ -71,9 +72,9 @@ export default {
   background-color: map-get($foundation-palette, "warning" )
 }
 
-.modal-delete-section {
-  width: 50%;
+.modal-form-section {
+  width: 90%;
   margin: 0 auto;
+  margin-bottom: 2%;
 }
-
 </style>

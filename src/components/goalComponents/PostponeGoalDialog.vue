@@ -5,7 +5,7 @@
     </template>
     <template v-slot:body>
       <div class="modal-form-section">
-        <h3>{{goal.name}}</h3>
+        <h4>{{goal.name}}</h4>
         Eingeplant für Kalenderwoche <span>{{goal.week.cw}}</span>
         <div class="grid-x grid-padding-x">
           <fieldset class="medium-12 cell">
@@ -39,7 +39,6 @@
               >
               <label for="radio-input_later">später</label>
           </fieldset>
-          {{postponeValue}}
         </div>
       </div>
     </template>

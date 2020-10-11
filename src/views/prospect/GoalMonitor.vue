@@ -34,6 +34,14 @@
               </PostponeGoalDialog>
             </transition>
             <transition name="modal">
+              <ScheduleGoalDialog
+                :goal="selectedGoal"
+                v-if="showScheduleModal"
+                @close="closeScheduleModal"
+              >
+              </ScheduleGoalDialog>
+            </transition>
+            <transition name="modal">
               <DeleteDialog
                 :goal="selectedGoal"
                 v-if="showDeleteModal"
@@ -55,6 +63,7 @@
               @display-delete-modal="openDeleteModal"
               @display-edit-modal="openEditModal"
               @display-postpone-modal="openPostponeModal"
+              @display-schedule-modal="openScheduleModal"
             >
             </GoalsCollectionWrapper>
           </div>
@@ -68,6 +77,7 @@
 import EditGoalDialog from '@/components/goalComponents/EditGoalDialog.vue';
 import DeleteDialog from '@/components/goalComponents/DeleteDialog.vue';
 import PostponeGoalDialog from '@/components/goalComponents/PostponeGoalDialog.vue';
+import ScheduleGoalDialog from '@/components/goalComponents/ScheduleGoalDialog.vue';
 import GoalsCollectionWrapper from '@/components/goalComponents/GoalsCollectionWrapper.vue';
 
 // import GoalNames from '@/enum/GoalNames';
@@ -80,6 +90,7 @@ export default {
     EditGoalDialog,
     DeleteDialog,
     PostponeGoalDialog,
+    ScheduleGoalDialog,
     GoalsCollectionWrapper,
     // GoalOverviewWrapper,
   },
@@ -94,6 +105,7 @@ export default {
       showEditModal: false,
       showDeleteModal: false,
       showPostponeModal: false,
+      showScheduleModal: false,
       goalOverviewObject: null,
     };
   },
@@ -190,6 +202,11 @@ export default {
           this.isLoading = false;
         });
     },
+    openScheduleModal(goal) {
+      console.log('Schedule Goal:', goal);
+      this.selectedGoal = goal;
+      this.showScheduleModal = true;
+    },
     openEditModal(goal) {
       console.log(`Öffne Dialogfenster mit gId = ${goal.id}`);
       this.selectedGoal = goal;
@@ -204,6 +221,9 @@ export default {
       console.log('open dialog');
       this.selectedGoal = goal;
       this.showPostponeModal = true;
+    },
+    closeScheduleModal() {
+      this.showScheduleModal = false;
     },
     closeDeleteModal() {
       this.showDeleteModal = false;

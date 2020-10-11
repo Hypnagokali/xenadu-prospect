@@ -4,11 +4,11 @@
       <option value="0">Diese Woche</option>
       <option value="1">Nächste Woche</option>
       <option value="2">Woche vom
-        {{ theThirdWeek.mondayString }} -
-        {{ theThirdWeek.sundayString }}</option>
+        {{ nextAfterNext.mondayString }} -
+        {{ nextAfterNext.sundayString }}</option>
       <option value="3">Woche vom
-        {{ theFourthWeek.mondayString }} -
-        {{ theFourthWeek.sundayString }}</option>
+        {{ inThreeWeeks.mondayString }} -
+        {{ inThreeWeeks.sundayString }}</option>
     </select>
   </div>
 </template>
@@ -22,7 +22,7 @@ export default {
     },
   },
   computed: {
-    theThirdWeek() {
+    nextAfterNext() {
       const m = new Date();
       const s = new Date();
       m.setDate(m.getDate() - m.getDay() + 1 + 14);
@@ -32,7 +32,7 @@ export default {
         sundayString: `${s.getDate()}.${s.getMonth() + 1}.`,
       };
     },
-    theFourthWeek() {
+    inThreeWeeks() {
       const m = new Date();
       const s = new Date();
       m.setDate(m.getDate() - m.getDay() + 1 + 21);
