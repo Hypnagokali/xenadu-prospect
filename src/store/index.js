@@ -5,6 +5,7 @@ import goals from './goals';
 import friends from './friends';
 import users from './users';
 import monitor from './monitor';
+import states from './states';
 import requestState from './request-state';
 
 Vue.use(Vuex);
@@ -16,7 +17,6 @@ export default new Vuex.Store({
   mutations: {
     TOGGLE_LOADING(state) {
       state.isLoading = !state.isLoading;
-      console.log('ROOT: isLoading', state.isLoading);
     },
   },
   actions: {
@@ -29,5 +29,6 @@ export default new Vuex.Store({
     friends,
     users,
     monitor,
+    states,
   },
 });

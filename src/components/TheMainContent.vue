@@ -1,5 +1,5 @@
 <template>
-  <div class="grid-x cell large-9">
+  <div class="grid-x cell medium-9 large-9">
     <router-view name="menu"/>
     <router-view></router-view>
   </div>

@@ -1,9 +1,9 @@
 <template>
-  <div class="content">
+  <div class="content medium-9">
     <div class="xenadu-view-header">
     </div>
     <div>
-      <div class="cell medium-12">
+      <div class="medium-12">
         <div class="xenadu-view-subheader">
           <h3 class="callout alert" v-if="hasErrorMessage">User nicht gefunden</h3>
           <div class="xenadu-load-animation" v-if="isLoading">
@@ -69,10 +69,28 @@
             </div>
         </div>
       </div>
-      <div class="cell medium-12">
+      <div class="medium-9">
         <div class="xenadu-view-content">
           <p v-if="isLoading">Userprofil laden ...</p>
-          <h3 v-else>Hier der Inhalt des Profils</h3>
+          <div class="grid-x grid-padding-x">
+            <div class="medium-offset-1 medium-4">
+            <div class="card">
+              <img class="avatar" src="@/assets/profile.jpg">
+              <div class="card-divider">
+                {{ getUser.name }} | Rang: 0
+              </div>
+              <div class="card-section">
+                <h6>Belohnungspunkte: {{ getUser.rewardPointsSum }}</h6>
+                <h6>Ziele geschafft: {{ getUser.doneGoalCount }}</h6>
+                <p><cite>Hier ist mein Lieblingszitat</cite></p>
+              </div>
+            </div>
+          </div>
+          <div class="medium-offset-1 medium-2">
+            <p>weiterer Inhalt kommt später ...</p>
+          </div>
+          </div>
+
         </div>
       </div>
     </div>
@@ -213,6 +231,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.card {
+  background-color: #ccc;
+};
+.card-section {
+  background-color: white;
+}
+.avatar {
+  vertical-align: middle;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+}
 .err {
   color: get-color(alert);
 }

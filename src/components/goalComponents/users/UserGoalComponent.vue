@@ -3,7 +3,8 @@
     <div class="menu-edit">
       <ul class="xenadu-menu menu align-center">
         <li>
-          <a href="#">
+          <span class="goal-menu likes">{{ goal.pushMotivations }}</span>
+          <a href="#" @click.prevent="$emit('push-motivation', goal)">
             <span data-tooltip tabindex="1" title="Push das Ziel">
               <span class="goal-menu fi-like"></span>
             </span>
@@ -59,6 +60,10 @@ dayjs.extend(customParseFormat);
 export default {
   name: 'GoalComponent',
   props: {
+    userId: {
+      Number,
+      required: true,
+    },
     goal: {
       Goal,
       required: true,
@@ -66,11 +71,6 @@ export default {
     overdue: {
       Boolean,
       default: false,
-    },
-  },
-  watch: {
-    goal(newVal) {
-      console.log('Neuer Wert', newVal);
     },
   },
   data() {
@@ -106,6 +106,11 @@ export default {
 
 <style lang="scss">
 @import '@/style/goals.scss';
+
+.likes {
+font-size: 1em;
+padding-top:15%;
+}
 
 .isDone {
   background-color: get-color(success);

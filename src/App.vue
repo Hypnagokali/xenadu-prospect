@@ -15,6 +15,8 @@ import GlobalLoading from '@/components/GlobalLoading.vue';
 import Content from '@/components/TheContent.vue';
 import Footer from '@/components/TheFooter.vue';
 
+import { mapGetters } from 'vuex';
+
 export default {
   components: {
     Header,
@@ -24,8 +26,11 @@ export default {
     Footer,
   },
   computed: {
+    ...mapGetters('states', {
+      isBaseStateLoading: 'isLoading',
+    }),
     isGlobalLoading() {
-      return this.$store.state.isLoading;
+      return this.$store.state.isLoading || this.isBaseStateLoading;
     },
   },
 };

@@ -44,8 +44,6 @@
         </form>
       </div>
     </div>
-
-    <p>{{ auth }}</p>
   </div>
 </template>
 

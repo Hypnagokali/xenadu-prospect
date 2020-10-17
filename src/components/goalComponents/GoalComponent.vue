@@ -121,7 +121,6 @@ export default {
       };
     },
     styleState() {
-      console.log('GOAL STATE', this.goal.state);
       const foundationClasses = ' goal-wrapper card';
       return this.stateColors[this.goal.state] + foundationClasses;
     },

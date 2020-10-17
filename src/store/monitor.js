@@ -20,6 +20,13 @@ export default {
     getUserGoalsCollectionArray: (state) => state.goalsCollectionArray,
   },
   mutations: {
+    REFRESH_PUSHS(state, goal) {
+      state.goalsCollectionArray.forEach((collection) => {
+        if (collection.isGoalPresent(goal)) {
+          collection.update(goal);
+        }
+      });
+    },
     SET_GOALS_COLLECTION(state, goalsCollectionList) {
       state.goalsCollectionList = goalsCollectionList;
     },
@@ -31,6 +38,22 @@ export default {
     },
   },
   actions: {
+    async push({ commit }, { userId, goalId }) {
+      commit('states/TOGGLE_LOADING', null, { root: true });
+      // commit({ type: 'states/TOGGLE_LOADING' }, { options: { root: true } });
+      await axios.post(`users/${userId}/push/${goalId}`)
+        .then((response) => {
+          const goal = Goal.createGoalFromData(response.data);
+          commit('REFRESH_PUSHS', goal);
+          console.log(goal);
+        })
+        .catch((e) => {
+          console.log(e);
+        })
+        .finally(() => {
+          commit('states/TOGGLE_LOADING', null, { root: true });
+        });
+    },
     /* Get collection of goals by weekName (weekName = GoalCollection->name) */
     async initOverview({ commit }, userId) {
       await axios.get(`users/${userId}/monitor/goals`)

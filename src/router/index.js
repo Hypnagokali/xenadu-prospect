@@ -66,7 +66,7 @@ const routes = [
     name: 'UserList',
     components: {
       default: UserList,
-      menu: MyMonitorMenu,
+      menu: MeMenu,
     },
     beforeEnter: hook,
   },

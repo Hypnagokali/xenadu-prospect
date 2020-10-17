@@ -1,5 +1,5 @@
 <template>
-  <div class="friend-menu cell large-3">
+  <div class="friend-menu cell medium-3 large-3">
       <h5>Freunde</h5>
       <div v-if="isLoading">Freundeliste wird geladen ...</div>
       <div v-if="!isLoading && friendList.length < 1">

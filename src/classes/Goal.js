@@ -13,6 +13,7 @@ export default class Goal {
     week,
     workloadPoints,
     state = 'todo',
+    pushMotivations = 0,
   ) {
     Object.assign(this, {
       id,
@@ -21,6 +22,7 @@ export default class Goal {
       addedOn,
       isRegistered,
       state,
+      pushMotivations,
     });
     this.week = week;
     this.workloadPoints = workloadPoints;
@@ -52,6 +54,7 @@ Goal.createGoalFromData = (responseData) => {
     weekObject,
     workloadPointsObject,
     responseData.state,
+    responseData.pushMotivations,
   );
   return goal;
 };

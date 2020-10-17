@@ -24,7 +24,6 @@ export default {
     SET_DONE(state, id) {
       let goal = null;
       state.goalsCollectionArray.forEach((goalsCollection) => {
-        console.log('TRY: setDone', id);
         /* using '!=' because: checking for null AND undefined. null == undefined */
         if (goalsCollection.findById(id) != null) {
           goal = goalsCollection.findById(id);
@@ -69,7 +68,6 @@ export default {
         description: formInput.description,
         reschedule: true,
       }).then((response) => {
-        console.log('Antwort vom Server:', response.data);
         commit('REMOVE_GOAL', Goal.createGoalFromData(response.data));
       }).catch((e) => {
         console.log('Fehler', e);
@@ -86,7 +84,6 @@ export default {
         workload_level: goal.workloadPoints.level,
         description: goal.description,
       }).then((response) => {
-        console.log('Antwort vom Server:', response.data);
         commit('REMOVE_GOAL', Goal.createGoalFromData(response.data));
       }).catch((e) => {
         console.log('Fehler', e);

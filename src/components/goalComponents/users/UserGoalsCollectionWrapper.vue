@@ -1,9 +1,6 @@
 <template>
   <div>
-    <div v-if="isLoading">
-      wird geladen ...
-    </div>
-    <div v-else>
+    <div>
       <div v-if="isCollectionEmpty">
       <p>
         {{ user.name }} hat noch keine Ziele dem Monitor hinzugefügt
@@ -15,7 +12,12 @@
           <h4>{{ weekName(collection.name) }}</h4>
         </div>
         <div v-for="goal in collection.goals" v-bind:key="goal.id">
-          <UserGoalComponent :goal="goal"></UserGoalComponent>
+          <UserGoalComponent
+            :userId="userId"
+            :goal="goal"
+            @push-motivation="$emit('push', goal)"
+            >
+          </UserGoalComponent>
         </div>
       </template>
     </div>
@@ -24,7 +26,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters } from 'vuex';
 import WeekNames from '@/enum/WeekNames';
 import UserGoalComponent from './UserGoalComponent.vue';
 
@@ -38,6 +40,7 @@ export default {
       required: true,
       Number,
     },
+    goalsCollectionArray: Array,
   },
   data() {
     return {
@@ -45,39 +48,18 @@ export default {
     };
   },
   methods: {
-    ...mapActions({
-      init: 'monitor/initOverview',
-    }),
     weekName(collectionName) {
       return WeekNames[collectionName];
-    },
-    initGoalCollections() {
-      this.isLoading = true;
-      this.init(this.userId)
-        .then(() => {
-          console.log('Monitor wurde initialisiert!');
-        })
-        .catch(() => {
-          console.log('Ein Fehler ist aufgetreten');
-        })
-        .finally(() => {
-          this.isLoading = false;
-        });
     },
   },
   computed: {
     ...mapGetters('monitor', {
-      goalsCollectionArray: 'getUserGoalsCollectionArray',
       isCollectionEmpty: 'isGoalsCollectionEmpty',
     }),
     ...mapGetters('friends', { user: 'getUser' }),
     collArray() {
       return this.collections;
     },
-  },
-  mounted() {
-    this.initGoalCollections();
-    console.log('UserGoalsCollectionArray', this.goalsCollectionArray);
   },
 };
 </script>

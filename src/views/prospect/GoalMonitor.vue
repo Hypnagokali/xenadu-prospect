@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <div class="content medium-9">
     <div class="xenadu-view-header">
       <ul class="xenadu-menu menu align-center">
         <li><a href="#" @click.prevent="loadUnfinished">Überfällig</a></li>
@@ -10,7 +10,7 @@
     </div>
 
     <div class="grid-x">
-      <div class="cell medium-12">
+      <div class="medium-12">
         <div class="xenadu-view-subheader">
           <h3>Ziele - Monitor</h3>
           <button class="xenadu-action button" @click="$router.push({name: 'AddGoal'})">
