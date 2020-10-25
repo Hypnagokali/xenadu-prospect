@@ -6,12 +6,6 @@
       <div class="cell medium-9">
         <div class="xenadu-view-subheader">
           <h3>Ziele-Monitor von {{ user.name}}</h3>
-          <button class="button success">
-            Action Button 1
-          </button>
-          <button class="button success">
-            Action Button 2
-          </button>
         </div>
       </div>
       <div class="cell medium-9">

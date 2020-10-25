@@ -74,6 +74,15 @@
         <strong>{{ goal.workloadPoints.level }}</strong>
       </span>
     </div>
+    <div class="push-and-comment card-section">
+      <span>Wurde
+        <strong>{{ goal.pushMotivations }}</strong>
+        gepusht
+      </span>
+      <div>
+        <a href="#" @click.prevent="showComment = !showComment">{{ comments.length }} Kommentare</a>
+      </div>
+    </div>
     <div
       class="progress"
       role="progressbar"
@@ -84,15 +93,26 @@
       aria-valuemax="100">
     <div class="progress-meter" v-bind:style="progressBarStyleObject">{{ doneState }}</div>
     </div>
+    <GoalCommentBox
+      v-if="showComment"
+      :userId="userId"
+      :goalId="goal.id"
+      :commentArray="comments"
+    >
+    </GoalCommentBox>
   </div>
 </template>
 
 <script>
 import Goal from '@/classes/Goal';
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
+import GoalCommentBox from '@/components/goalComponents/misc/GoalCommentBox.vue';
 
 export default {
   name: 'GoalComponent',
+  components: {
+    GoalCommentBox,
+  },
   props: {
     goal: {
       Goal,
@@ -105,6 +125,8 @@ export default {
   },
   data() {
     return {
+      comments: [],
+      showComment: false,
       stateColors: {
         done: 'isDone',
         todo: '',
@@ -112,6 +134,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters('auth', { userId: 'getUserId' }),
     doneState() {
       return this.goal.state === 'done' ? '100%' : '0%';
     },
@@ -138,6 +161,7 @@ export default {
     ...mapActions([
       'toggleStateDone',
     ]),
+    ...mapActions({ getComments: 'socialMedia/comments' }),
     scheduleGoal() {
       this.$emit('display-schedule-modal', this.goal);
     },
@@ -155,11 +179,26 @@ export default {
       this.$emit('display-postpone-modal', this.goal);
     },
   },
+  created() {
+    this.getComments({ userId: this.userId, goalId: this.goal.id })
+      .then((comments) => {
+        this.comments = comments;
+        console.log('ok', comments);
+      })
+      .catch()
+      .finally();
+  },
 };
 </script>
 
 <style lang="scss">
+@import '@/style/comments.scss';
 @import '@/style/goals.scss';
+
+.likes {
+  font-size: 1em;
+  padding-top:15%;
+}
 
 .isDone {
   background-color: get-color(success);

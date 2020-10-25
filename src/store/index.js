@@ -7,6 +7,7 @@ import users from './users';
 import monitor from './monitor';
 import states from './states';
 import requestState from './request-state';
+import socialMedia from './socialMedia';
 
 Vue.use(Vuex);
 
@@ -30,5 +31,6 @@ export default new Vuex.Store({
     users,
     monitor,
     states,
+    socialMedia,
   },
 });

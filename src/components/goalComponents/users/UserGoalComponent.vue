@@ -11,8 +11,8 @@
             </a>
         </li>
         <li>
-          <a href="#" @click.prevent="editGoal">
-            <span data-tooltip tabindex="2" title="Kommentar schreiben">
+          <a href="#" @click.prevent="showComment = !showComment">
+            <span data-tooltip tabindex="2" title="Kommentare">
               <span class="goal-menu fi-comment"></span>
             </span>
           </a>
@@ -37,6 +37,9 @@
         <strong>{{ goal.workloadPoints.level }}</strong>
       </span>
     </div>
+    <div>
+        <a href="#" @click.prevent="showComment = !showComment">{{ comments.length }} Kommentare</a>
+    </div>
     <div
       class="progress"
       role="progressbar"
@@ -47,6 +50,13 @@
       aria-valuemax="100">
     <div class="progress-meter" v-bind:style="progressBarStyleObject">{{ doneState }}</div>
     </div>
+    <GoalCommentBox
+      v-if="showComment"
+      :commentArray="comments"
+      :userId="userId"
+      :goalId="goal.id"
+    >
+    </GoalCommentBox>
   </div>
 </template>
 
@@ -54,11 +64,17 @@
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import Goal from '@/classes/Goal';
+import GoalCommentBox from '@/components/goalComponents/misc/GoalCommentBox.vue';
+
+import { mapActions } from 'vuex';
 
 dayjs.extend(customParseFormat);
 
 export default {
   name: 'GoalComponent',
+  components: {
+    GoalCommentBox,
+  },
   props: {
     userId: {
       Number,
@@ -79,7 +95,12 @@ export default {
         done: 'isDone',
         todo: '',
       },
+      showComment: false,
+      comments: [],
     };
+  },
+  methods: {
+    ...mapActions({ getComments: 'socialMedia/comments' }),
   },
   computed: {
     doneState() {
@@ -97,14 +118,23 @@ export default {
     addedOnDateString() {
       // const theDate = this.goal.addedOn;
       const date = dayjs(this.goal.addedOn).format('DD.MM.YYYY');
-      console.log(dayjs('2019-01-25').format('DD/MM/YYYY'));
       return date;
     },
+  },
+  created() {
+    this.getComments({ userId: this.userId, goalId: this.goal.id })
+      .then((comments) => {
+        this.comments = comments;
+        console.log('ok', comments);
+      })
+      .catch()
+      .finally();
   },
 };
 </script>
 
 <style lang="scss">
+@import '@/style/comments.scss';
 @import '@/style/goals.scss';
 
 .likes {

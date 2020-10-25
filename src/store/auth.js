@@ -24,6 +24,7 @@ export default {
   },
 
   getters: {
+    getUserId: (state) => state.user.id,
     getTimeLoggedIn: (state) => state.timeLoggedIn,
     getToken: (state) => state.token,
     getUser: (state) => state.user,
