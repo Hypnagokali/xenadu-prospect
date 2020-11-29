@@ -5,6 +5,10 @@ export default class GoalsCollection {
     this.goals = goalArray;
   }
 
+  isGoalPresent(goal) {
+    return !(this.goals.findIndex((g) => g.id === goal.id) === -1);
+  }
+
   findById(id) {
     return this.goals.find((g) => g.id === id);
   }
@@ -26,7 +30,8 @@ export default class GoalsCollection {
 
   update(goal) {
     const index = this.goals.findIndex((g) => g.id === goal.id);
-    this.goals[index] = goal;
+    this.goals.splice(index, 1, goal);
+    // this.goals[index] = goal;
     return this.goals;
   }
 

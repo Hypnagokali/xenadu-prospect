@@ -1,50 +1,43 @@
 <template>
-  <div class="xenadu-nav top-bar">
-    <ul class="xenadu-nav__links menu">
-      <li>
-        <router-link :to="{name: 'Home'}">
-          Hauptseite
-        </router-link>
-      </li>
-      <template v-if="authenticated">
-        <li>
-          <router-link :to="{name: 'Routines'}">
-            Routine - Spiegel
-          </router-link>
-        </li>
-        <li>
-          <router-link :to="{name: 'Goals'}">
-            Ziele - Spiegel
-          </router-link>
-        </li>
-        <li>
-          <router-link :to="{name: 'MyDay'}">
-            Mein Tag
-          </router-link>
-        </li>
-        <li>
-          <router-link :to="{name: 'Dashboard'}">
-            Monitor
-          </router-link>
-        </li>
-        <li>
-          <a href="#" @click.prevent="logout">
-            {{ user.name }} - Logout
-          </a>
-        </li>
-      </template>
-      <template v-else>
-        <li>
-          <router-link :to="{name: 'Login'}">
-            Login
-          </router-link>
-         </li>
-      </template>
-    </ul>
+  <div class="grid-x">
+    <div class="xenadu-nav cell">
+      <ul class="xenadu-nav__links menu">
+        <template v-if="authenticated">
+          <li>
+            <router-link :to="{name: 'Home'}">
+              Ich
+            </router-link>
+          </li>
+          <li>
+            <router-link :to="{name: 'Monitor'}">
+              Monitor
+            </router-link>
+          </li>
+          <li>
+            <router-link :to="{name: 'UserList'}">
+              Alle Benutzer
+            </router-link>
+          </li>
+          <li>
+            <a href="#" @click.prevent="logout">
+              {{ user.name }} - Logout
+            </a>
+          </li>
+        </template>
+        <template v-else>
+          <li>
+            <router-link :to="{name: 'Login'}">
+              Login
+            </router-link>
+          </li>
+        </template>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script>
+import store from '@/store';
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
@@ -59,14 +52,13 @@ export default {
     ...mapActions({
       logoutAction: 'auth/logout',
     }),
-    logout() {
-      this.logoutAction().then(
-        this.$router.replace({
-          name: 'Home',
-        }),
-      ).catch((e) => {
-        console.log(e.message);
-      });
+    async logout() {
+      store.commit('requestState/SET_WAITING');
+      await this.logoutAction()
+        .then()
+        .finally(() => {
+          this.$router.replace({ name: 'Login' });
+        });
     },
   },
 };

@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import GoalNames from '@/enum/GoalNames';
+import GoalNames from '@/enum/WeekNames';
 import GoalWrapper from './GoalWrapper.vue';
 
 export default {
@@ -80,7 +80,7 @@ export default {
     },
     passToParrent(goal) {
       this.$emit('displayDeleteModal', goal);
-      console.log('GOAL OVERVIEW WRAPPER -> MSG', goal);
+
     },
   },
 };

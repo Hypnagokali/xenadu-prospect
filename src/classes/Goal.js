@@ -6,21 +6,26 @@ import WorkloadPoints from './WorkloadPoints';
 export default class Goal {
   constructor(
     id,
-    description,
+    description = '',
     name,
     addedOn,
+    isRegistered,
     week,
     workloadPoints,
     state = 'todo',
+    pushMotivations = 0,
   ) {
     Object.assign(this, {
       id,
       description,
       name,
       addedOn,
+      isRegistered,
       state,
+      pushMotivations,
     });
     this.week = week;
+    this.week.cw = parseInt(this.week.cw, 10);
     this.workloadPoints = workloadPoints;
   }
 }
@@ -37,14 +42,20 @@ Goal.createGoalFromData = (responseData) => {
   const weekObject = new Week(
     snakeToCamelConverter(responseData.week),
   );
+  let description = '';
+  if (responseData.description !== undefined) {
+    description = responseData.description;
+  }
   const goal = new Goal(
     responseData.id,
-    decodeHtmlSpecialChars(responseData.description),
+    decodeHtmlSpecialChars(description),
     decodeHtmlSpecialChars(responseData.name),
     responseData.addedOn,
+    responseData.isRegistered,
     weekObject,
     workloadPointsObject,
     responseData.state,
+    responseData.pushMotivations,
   );
   return goal;
 };

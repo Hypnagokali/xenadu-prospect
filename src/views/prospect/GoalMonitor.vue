@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="content medium-9">
     <div class="xenadu-view-header">
       <ul class="xenadu-menu menu align-center">
         <li><a href="#" @click.prevent="loadUnfinished">Überfällig</a></li>
@@ -10,7 +10,7 @@
     </div>
 
     <div class="grid-x">
-      <div class="cell medium-12">
+      <div class="medium-12">
         <div class="xenadu-view-subheader">
           <h3>Ziele - Monitor</h3>
           <button class="xenadu-action button" @click="$router.push({name: 'AddGoal'})">
@@ -25,6 +25,22 @@
             <img src="@/assets/loadring.gif">
           </div>
           <div v-if="isLoading === false" class="goals">
+            <transition name="modal">
+              <PostponeGoalDialog
+                :goal="selectedGoal"
+                v-if="showPostponeModal"
+                @close="closePostponeModal"
+              >
+              </PostponeGoalDialog>
+            </transition>
+            <transition name="modal">
+              <ScheduleGoalDialog
+                :goal="selectedGoal"
+                v-if="showScheduleModal"
+                @close="closeScheduleModal"
+              >
+              </ScheduleGoalDialog>
+            </transition>
             <transition name="modal">
               <DeleteDialog
                 :goal="selectedGoal"
@@ -46,6 +62,8 @@
               :collections="collectionArray"
               @display-delete-modal="openDeleteModal"
               @display-edit-modal="openEditModal"
+              @display-postpone-modal="openPostponeModal"
+              @display-schedule-modal="openScheduleModal"
             >
             </GoalsCollectionWrapper>
           </div>
@@ -58,6 +76,8 @@
 <script>
 import EditGoalDialog from '@/components/goalComponents/EditGoalDialog.vue';
 import DeleteDialog from '@/components/goalComponents/DeleteDialog.vue';
+import PostponeGoalDialog from '@/components/goalComponents/PostponeGoalDialog.vue';
+import ScheduleGoalDialog from '@/components/goalComponents/ScheduleGoalDialog.vue';
 import GoalsCollectionWrapper from '@/components/goalComponents/GoalsCollectionWrapper.vue';
 
 // import GoalNames from '@/enum/GoalNames';
@@ -69,6 +89,8 @@ export default {
     // GoalWrapper,
     EditGoalDialog,
     DeleteDialog,
+    PostponeGoalDialog,
+    ScheduleGoalDialog,
     GoalsCollectionWrapper,
     // GoalOverviewWrapper,
   },
@@ -82,6 +104,8 @@ export default {
       isLoading: false,
       showEditModal: false,
       showDeleteModal: false,
+      showPostponeModal: false,
+      showScheduleModal: false,
       goalOverviewObject: null,
     };
   },
@@ -105,10 +129,9 @@ export default {
         this.collectionArray = this.goalsCollectionArray;
       });
     },
-    closeWithMsg(msg) {
+    closeWithMsg() {
       this.closeDeleteModal();
       this.collectionArray = this.goalsCollectionArray;
-      console.log(msg);
     },
     resetGoals() {
       this.goalOverviewObject = null;
@@ -140,9 +163,7 @@ export default {
         .then(() => {
           this.collectionArray = this.goalsCollectionArray;
         })
-        .catch((error) => {
-          console.log(error);
-        })
+        .catch()
         .finally(() => {
           this.isLoading = false;
         });
@@ -178,21 +199,33 @@ export default {
           this.isLoading = false;
         });
     },
-    openEditModal(goal) {
-      console.log(`Öffne Dialogfenster mit gId = ${goal.id}`);
+    openScheduleModal(goal) {
       this.selectedGoal = goal;
-      // console.log(this.selectedGoal);
+      this.showScheduleModal = true;
+    },
+    openEditModal(goal) {
+      this.selectedGoal = goal;
       this.showEditModal = true;
     },
     openDeleteModal(goal) {
       this.selectedGoal = goal;
       this.showDeleteModal = true;
     },
+    openPostponeModal(goal) {
+      this.selectedGoal = goal;
+      this.showPostponeModal = true;
+    },
+    closeScheduleModal() {
+      this.showScheduleModal = false;
+    },
     closeDeleteModal() {
       this.showDeleteModal = false;
     },
     closeEditModal() {
       this.showEditModal = false;
+    },
+    closePostponeModal() {
+      this.showPostponeModal = false;
     },
   },
   mounted() {

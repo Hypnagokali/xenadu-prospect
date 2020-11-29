@@ -4,22 +4,54 @@
       <ul class="xenadu-menu menu align-center">
       <li>
         <a href="#" @click.prevent="toggleDone">
-          <span class="goal-menu goal-menu goal-menu-done fi-check"></span>
+          <span data-tooltip tabindex="1" title="Ziel als erledigt markieren">
+            <span class="goal-menu goal-menu goal-menu-done fi-check"></span>
+          </span>
           </a>
       </li>
       <li>
         <a href="#" @click.prevent="editGoal">
-          <span class="goal-menu goal-menu-edit fi-pencil"></span>
+          <span data-tooltip tabindex="2" title="Ziel bearbeiten">
+            <span class="goal-menu goal-menu-edit fi-pencil"></span>
+          </span>
         </a>
       </li>
-      <li>
+      <li v-if="!overdue">
+        <a href="#" @click.prevent="postponeGoal">
+          <span data-tooltip tabindex="1" title="Ziel verschieben">
+            <span class="goal-menu goal-menu-postpone fi-fast-forward"></span>
+          </span>
+        </a>
+      </li>
+      <li v-if="overdue" @click.prevent="scheduleGoal">
         <a href="#">
-          <span class="goal-menu goal-menu-postpone fi-fast-forward"></span>
+          <span data-tooltip tabindex="3" title="Ziel neu einplanen">
+            <span class="goal-menu goal-menu-postpone fi-arrows-in"></span>
+          </span>
+        </a>
+      </li>
+      <li v-if="goal.isRegistered">
+        <a href="#">
+          <span
+            data-tooltip tabindex="4"
+            title="Ziel ist mit Monitor verbunden. Ziel vom Monitor entfernen"
+          >
+            <span class="goal-menu goal-menu-postpone fi-link"></span>
+          </span>
+        </a>
+      </li>
+      <li v-else>
+        <a href="#">
+          <span data-tooltip tabindex="4" title="Ziel zum Monitor hinzufügen">
+            <span class="goal-menu goal-menu-postpone fi-unlink"></span>
+          </span>
         </a>
       </li>
       <li>
         <a href="#" @click.prevent="deleteGoal">
-          <span class="goal-menu goal-menu-delete fi-x"></span>
+          <span data-tooltip tabindex="1" title="Ziel löschen">
+            <span class="goal-menu goal-menu-delete fi-x"></span>
+          </span>
         </a>
       </li>
     </ul>
@@ -42,6 +74,15 @@
         <strong>{{ goal.workloadPoints.level }}</strong>
       </span>
     </div>
+    <div class="push-and-comment card-section">
+      <span>Wurde
+        <strong>{{ goal.pushMotivations }}</strong>
+        gepusht
+      </span>
+      <div>
+        <a href="#" @click.prevent="showComment = !showComment">{{ comments.length }} Kommentare</a>
+      </div>
+    </div>
     <div
       class="progress"
       role="progressbar"
@@ -52,23 +93,40 @@
       aria-valuemax="100">
     <div class="progress-meter" v-bind:style="progressBarStyleObject">{{ doneState }}</div>
     </div>
+    <GoalCommentBox
+      v-if="showComment"
+      :userId="userId"
+      :goalId="goal.id"
+      :commentArray="comments"
+    >
+    </GoalCommentBox>
   </div>
 </template>
 
 <script>
 import Goal from '@/classes/Goal';
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
+import GoalCommentBox from '@/components/goalComponents/misc/GoalCommentBox.vue';
 
 export default {
   name: 'GoalComponent',
+  components: {
+    GoalCommentBox,
+  },
   props: {
     goal: {
       Goal,
       required: true,
     },
+    overdue: {
+      Boolean,
+      default: false,
+    },
   },
   data() {
     return {
+      comments: [],
+      showComment: false,
       stateColors: {
         done: 'isDone',
         todo: '',
@@ -76,6 +134,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters('auth', { userId: 'getUserId' }),
     doneState() {
       return this.goal.state === 'done' ? '100%' : '0%';
     },
@@ -85,7 +144,6 @@ export default {
       };
     },
     styleState() {
-      console.log('GOAL STATE', this.goal.state);
       const foundationClasses = ' goal-wrapper card';
       return this.stateColors[this.goal.state] + foundationClasses;
     },
@@ -103,6 +161,10 @@ export default {
     ...mapActions([
       'toggleStateDone',
     ]),
+    ...mapActions({ getComments: 'socialMedia/comments' }),
+    scheduleGoal() {
+      this.$emit('display-schedule-modal', this.goal);
+    },
     toggleDone() {
       this.toggleStateDone(this.goal);
     },
@@ -112,12 +174,29 @@ export default {
     deleteGoal() {
       this.$emit('display-delete-modal', this.goal);
     },
+    postponeGoal() {
+      this.$emit('display-postpone-modal', this.goal);
+    },
+  },
+  created() {
+    this.getComments({ userId: this.userId, goalId: this.goal.id })
+      .then((comments) => {
+        this.comments = comments;
+      })
+      .catch()
+      .finally();
   },
 };
 </script>
 
 <style lang="scss">
+@import '@/style/comments.scss';
 @import '@/style/goals.scss';
+
+.likes {
+  font-size: 1em;
+  padding-top:15%;
+}
 
 .isDone {
   background-color: get-color(success);

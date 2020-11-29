@@ -2,8 +2,6 @@ import store from '@/store';
 import axios from 'axios';
 
 store.subscribe((mutation) => {
-  console.log('MUTATION', mutation);
-  console.log(axios.defaults.headers);
   switch (mutation.type) {
     case 'auth/SET_TOKEN':
       if (mutation.payload) {
@@ -15,6 +13,5 @@ store.subscribe((mutation) => {
       }
       break;
     default:
-      console.log('default');
   }
 });

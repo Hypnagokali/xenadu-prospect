@@ -24,6 +24,7 @@ export default {
   },
 
   getters: {
+    getUserId: (state) => state.user.id,
     getTimeLoggedIn: (state) => state.timeLoggedIn,
     getToken: (state) => state.token,
     getUser: (state) => state.user,
@@ -73,7 +74,6 @@ export default {
 
         await dispatch('attempt', response.data.token);
       } catch (e) {
-        console.log(e);
         dispatch('destroyUser');
       }
     },
@@ -86,10 +86,10 @@ export default {
         dispatch('destroyUser');
         return false;
       }
-      // console.log('ATTEMPT CALLED');
-      // console.log(`state.token = ${state.token}`);
+      //
+      //
       // if (!state.token) {
-      //   console.log('Kein Token, kein Request');
+      //
       //   return false;
       // }
 
@@ -103,8 +103,12 @@ export default {
       }
     },
 
-    logout({ commit }) {
-      return axios.post('auth/logout').then(() => {
+    // async refreshToken({ commit }, oldToken) {
+    //   axios.post();
+    // }
+
+    async logout({ commit }) {
+      await axios.post('auth/logout').then(() => {
         commit('SET_TOKEN', null);
         commit('SET_USER', null);
         commit('SET_TIME_LOGGED_IN', null);

@@ -44,8 +44,9 @@
 }
 
 .modal-mask {
+  border: solid 1px #222;
   width: 60vh;
   min-height: 150px;
-  background-color: rgb(186, 170, 255);
+  background-color: #eee;
 }
 </style>

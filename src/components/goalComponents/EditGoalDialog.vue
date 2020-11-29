@@ -13,13 +13,13 @@
       </div>
       <div class="grid-container">
         <div class="grid-x grid-padding-x">
-          <div class="medium-6 small-12 cell">
+          <div class="medium-12 small-12 cell">
             <label>
               Name
               <input required type="text" v-model="form.name">
             </label>
           </div>
-          <div class="medium-6 small-12 cell">
+          <div class="medium-12 small-12 cell">
             <label>
               Beschreibung
               <input required type="text" v-model="form.description">
@@ -111,15 +111,6 @@ export default {
       return this.goal;
     },
   },
-  watch: {
-    goal: {
-      handler(newVal, oldVal) {
-        console.log(newVal, oldVal);
-      },
-      deep: true,
-      immediate: true,
-    },
-  },
   data() {
     return {
       form: {
@@ -147,9 +138,7 @@ export default {
             this.$emit('update-goals');
           }
         })
-        .catch((e) => {
-          console.log(e);
-        })
+        .catch()
         .finally(() => {
           this.loading = false;
         });

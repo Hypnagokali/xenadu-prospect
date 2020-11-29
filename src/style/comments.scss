@@ -1,0 +1,29 @@
+@import './main.scss';
+
+.comment-box {
+    background-color: $light-gray;
+    margin-bottom: 2%;
+}
+
+.comment-input {
+    background-color: $light-gray;
+    margin-bottom: 0;
+}
+
+.comment-date {
+    font-size: small;
+    font-weight: bold;
+}
+
+.comment {
+    border-radius: 10px;
+}
+
+.comment-wrapper {
+    background-color: get-color('tertiary');
+    padding: 5%;
+}
+
+.comment-user {
+    font-weight: bold;
+}

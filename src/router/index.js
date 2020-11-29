@@ -2,13 +2,21 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import AddGoal from '@/views/prospect/AddGoal.vue';
 import GoalMonitor from '@/views/prospect/GoalMonitor.vue';
-import Routines from '@/views/prospect/Routines.vue';
-import MyDay from '@/views/moment/MyDay.vue';
 import Home from '@/views/Home.vue';
 import Login from '@/views/Login.vue';
-import Dashboard from '@/views/Dashboard.vue';
-import hook from './beforeEnterHook';
 
+import MeMenu from '@/views/menu/MeMenu.vue';
+import MyMonitorMenu from '@/views/menu/MyMonitorMenu.vue';
+
+import UserProfileView from '@/views/users/UserProfileView.vue';
+import UserMonitorMenu from '@/views/menu/UserMonitorMenu.vue';
+import UserList from '@/views/users/UserList.vue';
+import MessageView from '@/views/users/MessageView.vue';
+
+import UserGoalMonitorView from '@/views/users/prospect/UserGoalMonitorView.vue';
+
+// check auth hook
+import hook from './beforeEnterHook';
 
 Vue.use(VueRouter);
 
@@ -16,7 +24,20 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home,
+    components: {
+      default: Home,
+      menu: MeMenu,
+    },
+    beforeEnter: hook,
+  },
+  {
+    path: '/prospect/monitors',
+    name: 'Monitor',
+    components: {
+      default: GoalMonitor,
+      menu: MyMonitorMenu,
+    },
+    beforeEnter: hook,
   },
   {
     path: '/login',
@@ -24,33 +45,57 @@ const routes = [
     component: Login,
   },
   {
-    path: '/dashboard',
-    name: 'Dashboard',
-    component: Dashboard,
-    beforeEnter: hook,
-  },
-  {
-    path: '/prospect/routines',
-    name: 'Routines',
-    component: Routines,
-    beforeEnter: hook,
-  },
-  {
     path: '/prospect/goals',
     name: 'Goals',
-    component: GoalMonitor,
+    components: {
+      default: GoalMonitor,
+      menu: MyMonitorMenu,
+    },
     beforeEnter: hook,
   },
   {
     path: '/prospect/goals/add',
     name: 'AddGoal',
-    component: AddGoal,
+    components: {
+      default: AddGoal,
+      menu: MyMonitorMenu,
+    },
     beforeEnter: hook,
   },
   {
-    path: '/moment/days',
-    name: 'MyDay',
-    component: MyDay,
+    path: '/users',
+    name: 'UserList',
+    components: {
+      default: UserList,
+      menu: MeMenu,
+    },
+    beforeEnter: hook,
+  },
+  {
+    path: '/users/:id',
+    name: 'UserProfileView',
+    components: {
+      default: UserProfileView,
+      menu: UserMonitorMenu,
+    },
+    beforeEnter: hook,
+  },
+  {
+    path: '/users/:id/messenger',
+    name: 'MessageView',
+    components: {
+      default: MessageView,
+      menu: UserMonitorMenu,
+    },
+    beforeEnter: hook,
+  },
+  {
+    path: '/users/:id/prospect/goals',
+    name: 'UserGoalMonitorView',
+    components: {
+      default: UserGoalMonitorView,
+      menu: UserMonitorMenu,
+    },
     beforeEnter: hook,
   },
 ];
