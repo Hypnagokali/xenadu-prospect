@@ -25,6 +25,7 @@ export default class Goal {
       pushMotivations,
     });
     this.week = week;
+    this.week.cw = parseInt(this.week.cw, 10);
     this.workloadPoints = workloadPoints;
   }
 }

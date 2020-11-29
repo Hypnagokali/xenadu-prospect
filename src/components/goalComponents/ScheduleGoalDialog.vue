@@ -65,7 +65,7 @@ export default {
       this.isLoading = true;
 
       this.reschedule(this.form).then(() => {
-        console.log('Ziel neu eingeplant');
+
       }).finally(() => {
         this.isLoading = false;
         this.$emit('close');

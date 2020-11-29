@@ -50,19 +50,17 @@ export default {
       initUserView: 'friends/initUserView',
     }),
     pushMotivation(goal) {
-      console.log('angekommen', goal);
-      console.log('user', this.user);
       this.push({ userId: this.user.id, goalId: goal.id });
     },
     initGoalCollections() {
       this.isLoading = true;
-      console.log('USER ID: ', this.userId);
+
       this.init(this.userId)
         .then(() => {
-          console.log('Monitor wurde initialisiert!', this.goalsCollectionArray);
+
         })
         .catch(() => {
-          console.log('Ein Fehler ist aufgetreten');
+
         })
         .finally(() => {
           this.isLoading = false;
@@ -89,7 +87,6 @@ export default {
       await Promise.all([this.initUserView(this.userId), this.initGoalCollections()]);
       // await this.initUserView(this.userId);
       this.isLoading = false;
-      console.log('mounted', this.user);
     } else {
       this.initGoalCollections();
     }

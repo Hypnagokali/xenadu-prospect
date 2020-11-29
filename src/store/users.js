@@ -17,11 +17,7 @@ export default {
     async init({ commit }) {
       await axios.get('/users')
         .then((response) => {
-          console.log(response);
           commit('INIT_USER_LIST', response.data);
-        })
-        .catch((e) => {
-          console.log(e);
         });
     },
   },

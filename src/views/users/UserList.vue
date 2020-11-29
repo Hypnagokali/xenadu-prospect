@@ -69,7 +69,7 @@ export default {
           this.userObjectList = this.getUserObjects;
         })
         .catch(() => {
-          console.log('Show an error!');
+
         })
         .finally(() => {
           this.isLoading = false;

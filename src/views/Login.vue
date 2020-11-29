@@ -6,16 +6,6 @@
       </div>
     </div>
 
-    <div class="grid-x">
-      <div class="cell large-9 large-offset-3 align-center">
-        <h4>Gast Account kann zum ausprobieren benutzt werden</h4>
-        <ul class="no-bullet">
-          <li>E-Mail: <em>gast@xenadu.de</em></li>
-          <li>Passwort: <em>gast1</em></li>
-        </ul>
-      </div>
-    </div>
-
     <div class="grid-x grid-padding-x text-center">
       <div class="cell large-9 large-offset-3 align-center">
         <form @submit.prevent="submit" autocomplete="off">
@@ -58,8 +48,8 @@ export default {
   data() {
     return {
       form: {
-        email: 'stefan.simon@xenadu.de',
-        password: 'itsmemygod',
+        email: '',
+        password: '',
       },
       messages: {
         errorMsg: '',

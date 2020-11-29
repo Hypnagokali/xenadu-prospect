@@ -22,13 +22,11 @@
                 </NotifyModal>
             </transition>
             <template v-if="isFriend">
-              <button
-                :disabled="isWaitingForResponse"
-                @click="openNotification"
-                class="button success"
-              >
-                Nachricht schreiben
-              </button>
+              <router-link :to="{name: 'MessageView'}">
+                <a :disabled="isWaitingForResponse" role="Button" class="button success">
+                  Nachricht schreiben
+                </a>
+              </router-link>
               <button
                 :disabled="isWaitingForResponse"
                 @click.prevent="endFriendship"
@@ -212,7 +210,7 @@ export default {
     },
     updateUserProfile() {
       this.isLoading = true;
-      console.log(this.userId);
+
       this.init(this.userId)
         .then(() => {
           this.user = this.getUser;

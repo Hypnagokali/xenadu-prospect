@@ -46,13 +46,6 @@ export default {
   props: {
     collections: Array,
   },
-  // props: ['collections'],
-  watch: {
-    collections(nv) {
-      console.log('THE WATCHER');
-      console.log(nv);
-    },
-  },
   methods: {
     weekName(collectionName) {
       return WeekNames[collectionName];

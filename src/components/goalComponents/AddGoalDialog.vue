@@ -128,7 +128,6 @@ export default {
       this.isSuccess = false;
       // this.$store.dispatch('create', this.form);
       this.create(this.form).then(() => {
-        console.log(this.isInputInvalid);
         if (!this.isInputInvalid) {
           this.clearForm();
           this.isSuccess = true;
@@ -140,11 +139,9 @@ export default {
         });
     },
     changeCW(cw) {
-      // console.log('changed!');
       this.form.cw = cw;
     },
     clearForm() {
-      console.log('clear form ...');
       const clearedForm = {
         name: '',
         description: '',

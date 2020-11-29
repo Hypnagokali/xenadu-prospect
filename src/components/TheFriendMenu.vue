@@ -44,13 +44,11 @@ export default {
   },
   mounted() {
     this.isLoading = true;
-    console.log('LOADING');
     this.initFriendList()
       .then()
       .finally(() => {
         this.isLoading = false;
       });
-    console.log(this.friendList);
   },
 };
 </script>

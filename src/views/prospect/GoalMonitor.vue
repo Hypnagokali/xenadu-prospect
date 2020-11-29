@@ -129,10 +129,9 @@ export default {
         this.collectionArray = this.goalsCollectionArray;
       });
     },
-    closeWithMsg(msg) {
+    closeWithMsg() {
       this.closeDeleteModal();
       this.collectionArray = this.goalsCollectionArray;
-      console.log(msg);
     },
     resetGoals() {
       this.goalOverviewObject = null;
@@ -164,9 +163,7 @@ export default {
         .then(() => {
           this.collectionArray = this.goalsCollectionArray;
         })
-        .catch((error) => {
-          console.log(error);
-        })
+        .catch()
         .finally(() => {
           this.isLoading = false;
         });
@@ -203,14 +200,11 @@ export default {
         });
     },
     openScheduleModal(goal) {
-      console.log('Schedule Goal:', goal);
       this.selectedGoal = goal;
       this.showScheduleModal = true;
     },
     openEditModal(goal) {
-      console.log(`Öffne Dialogfenster mit gId = ${goal.id}`);
       this.selectedGoal = goal;
-      // console.log(this.selectedGoal);
       this.showEditModal = true;
     },
     openDeleteModal(goal) {
@@ -218,7 +212,6 @@ export default {
       this.showDeleteModal = true;
     },
     openPostponeModal(goal) {
-      console.log('open dialog');
       this.selectedGoal = goal;
       this.showPostponeModal = true;
     },

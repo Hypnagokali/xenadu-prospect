@@ -11,6 +11,7 @@ import MyMonitorMenu from '@/views/menu/MyMonitorMenu.vue';
 import UserProfileView from '@/views/users/UserProfileView.vue';
 import UserMonitorMenu from '@/views/menu/UserMonitorMenu.vue';
 import UserList from '@/views/users/UserList.vue';
+import MessageView from '@/views/users/MessageView.vue';
 
 import UserGoalMonitorView from '@/views/users/prospect/UserGoalMonitorView.vue';
 
@@ -75,6 +76,15 @@ const routes = [
     name: 'UserProfileView',
     components: {
       default: UserProfileView,
+      menu: UserMonitorMenu,
+    },
+    beforeEnter: hook,
+  },
+  {
+    path: '/users/:id/messenger',
+    name: 'MessageView',
+    components: {
+      default: MessageView,
       menu: UserMonitorMenu,
     },
     beforeEnter: hook,

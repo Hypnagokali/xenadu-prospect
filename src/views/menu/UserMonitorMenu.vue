@@ -3,9 +3,9 @@
     <template v-if="!isLoading">
       <h5 v-if="!isLoading">{{ user.name }}</h5>
       <ul class="vertical menu">
-          <li><a href="#">Action Logger</a></li>
+          <!-- <li><a href="#">Action Logger</a></li> -->
           <li><router-link :to="{ name: 'UserGoalMonitorView'}">Ziele-Monitor</router-link></li>
-          <li><a href="#">Nachrichten von {{ user.name }}</a></li>
+          <!-- <li><a href="#">Nachrichten von {{ user.name }}</a></li> -->
       </ul>
     </template>
     <template v-else>

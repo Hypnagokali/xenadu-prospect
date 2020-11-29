@@ -1,3 +1,4 @@
+/* eslint-disable */
 import axios from 'axios';
 import Goal from '../classes/Goal';
 import GoalsCollection from '../classes/GoalsCollection';
@@ -39,30 +40,6 @@ export default {
     },
   },
   actions: {
-    // async comments({ _ }, { userId, goalId }) {
-    //   return new Promise((resolve, reject) => {
-    //     axios.get(`users/${userId}/monitor/goals/${goalId}/comments`)
-    //       .then((response) => {
-    //         console.log('REFACTOR', _);
-    //         const comments = [];
-    //         response.data.forEach((comment) => {
-    //           console.log('Was ist hier los?', comment);
-    //           comments.push(new Comment(
-    //             {
-    //               content: comment.content,
-    //               commentingUser: comment.commenting_user.name,
-    //               goalId: comment.goal_id,
-    //               postedAt: comment.posted_at,
-    //             },
-    //           ));
-    //           resolve(comments);
-    //         });
-    //       })
-    //       .catch((error) => {
-    //         reject(error);
-    //       });
-    //   });
-    // },
     async push({ commit }, { userId, goalId }) {
       commit('states/TOGGLE_LOADING', null, { root: true });
       // commit({ type: 'states/TOGGLE_LOADING' }, { options: { root: true } });
@@ -72,7 +49,6 @@ export default {
           commit('REFRESH_PUSHS', goal);
         })
         .catch((e) => {
-          console.log(e);
         })
         .finally(() => {
           commit('states/TOGGLE_LOADING', null, { root: true });
@@ -98,7 +74,6 @@ export default {
 
             return goalsCollection;
           });
-          console.log('IST EMPTY?', goalCollectionList.isEmpty());
           commit('SET_GOALS_COLLECTION', goalCollectionList);
           commit('SET_COLLECTION', collection);
         })

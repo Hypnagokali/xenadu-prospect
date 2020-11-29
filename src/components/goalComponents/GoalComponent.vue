@@ -175,7 +175,6 @@ export default {
       this.$emit('display-delete-modal', this.goal);
     },
     postponeGoal() {
-      console.log('postpone', this.goal);
       this.$emit('display-postpone-modal', this.goal);
     },
   },
@@ -183,7 +182,6 @@ export default {
     this.getComments({ userId: this.userId, goalId: this.goal.id })
       .then((comments) => {
         this.comments = comments;
-        console.log('ok', comments);
       })
       .catch()
       .finally();

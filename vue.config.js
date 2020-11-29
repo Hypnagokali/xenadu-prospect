@@ -13,6 +13,6 @@ module.exports = {
     },
   },
   publicPath: process.env.NODE_ENV === 'production'
-    ? '/xenadu/xenadu-frontend/mission-monitor/dist/'
+    ? '/' // '/xenadu/deploy20201025/xenadu-frontend/dist/'
     : '/',
 };

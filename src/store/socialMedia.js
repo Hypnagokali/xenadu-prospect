@@ -1,3 +1,4 @@
+/* eslint-disable */
 import axios from 'axios';
 import Comment from '@/classes/Comment';
 import decodeHtmlSpecialChars from '@/helper/decodeHtmlspecialchars';
@@ -15,14 +16,12 @@ export default {
 
   },
   actions: {
-    async saveComment({ _ }, commentData) {
-      console.log('REFACTOR', _);
+    async saveComment({ _ }, commentData) { // eslint-disable-line no-eval
       return new Promise((resolve, reject) => {
         axios.post(`users/${commentData.userId}/monitor/goals/${commentData.goalId}/comment/send`, {
           comment: commentData.comment,
         })
           .then((response) => {
-            console.log(response.data);
             const comments = [];
             response.data.forEach((comment) => {
               comments.push(new Comment(
@@ -41,11 +40,10 @@ export default {
           });
       });
     },
-    async comments({ _ }, { userId, goalId }) {
+    async comments({ _ }, { userId, goalId }) { // eslint-disable-line no-eval
       return new Promise((resolve, reject) => {
         axios.get(`users/${userId}/monitor/goals/${goalId}/comments`)
           .then((response) => {
-            console.log('REFACTOR', _);
             const comments = [];
             response.data.forEach((comment) => {
               comments.push(new Comment(

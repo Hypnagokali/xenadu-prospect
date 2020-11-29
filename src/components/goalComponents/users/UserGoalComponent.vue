@@ -125,7 +125,6 @@ export default {
     this.getComments({ userId: this.userId, goalId: this.goal.id })
       .then((comments) => {
         this.comments = comments;
-        console.log('ok', comments);
       })
       .catch()
       .finally();

@@ -85,19 +85,15 @@ export default {
       'postpone',
     ]),
     some() {
-      console.log('Hallo von some');
     },
     postponeGoal() {
       this.isLoading = true;
-      console.log('KW vorher: ', this.goal.week.cw);
-
       if (this.postponeValue > 0 && this.postponeValue <= 4) {
-        this.goal.week.cw += this.postponeValue;
+        this.goal.week.cw += parseInt(this.postponeValue, 10);
       } else if (this.postponeValue === 9) {
         this.goal.state = 'postponed';
       }
       this.postpone(this.goal).then(() => {
-        console.log('Ziel verschoben');
       }).finally(() => {
         this.isLoading = false;
         this.$emit('close');

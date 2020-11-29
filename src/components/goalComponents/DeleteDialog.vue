@@ -50,7 +50,7 @@ export default {
     ]),
     deleteGoal() {
       this.loading = true;
-      console.log('delete-modal: ', this.goal);
+
       this.delete(this.goal)
         .then(() => {
           // this.$emit('delete-goal');

@@ -5,8 +5,8 @@
           <router-link :to="{name: 'Goals'}">
             Ziele Monitor
           </router-link>
-          <li><a href="#">Routinen</a></li>
-          <li><a href="#">Mein Tag</a></li>
+          <!-- <li><a href="#">Routinen</a></li>
+          <li><a href="#">Mein Tag</a></li> -->
         </ul>
   </div>
 </template>

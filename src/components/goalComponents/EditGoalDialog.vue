@@ -111,15 +111,6 @@ export default {
       return this.goal;
     },
   },
-  watch: {
-    goal: {
-      handler(newVal, oldVal) {
-        console.log(newVal, oldVal);
-      },
-      deep: true,
-      immediate: true,
-    },
-  },
   data() {
     return {
       form: {
@@ -147,9 +138,7 @@ export default {
             this.$emit('update-goals');
           }
         })
-        .catch((e) => {
-          console.log(e);
-        })
+        .catch()
         .finally(() => {
           this.loading = false;
         });

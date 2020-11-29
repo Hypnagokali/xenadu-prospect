@@ -14,7 +14,7 @@ export default class GoalsCollectionList {
         empty = false;
       }
     });
-    console.log('isEmpty in GoalsCollList', empty);
+
     return empty;
   }
 
@@ -24,6 +24,6 @@ export default class GoalsCollectionList {
       goal = c.goals.find((g) => g.id === id);
     });
     return goal;
-    // console.log(this.collections, id);
+    //
   }
 }

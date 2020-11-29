@@ -74,7 +74,6 @@ export default {
 
         await dispatch('attempt', response.data.token);
       } catch (e) {
-        console.log(e);
         dispatch('destroyUser');
       }
     },
@@ -87,10 +86,10 @@ export default {
         dispatch('destroyUser');
         return false;
       }
-      // console.log('ATTEMPT CALLED');
-      // console.log(`state.token = ${state.token}`);
+      //
+      //
       // if (!state.token) {
-      //   console.log('Kein Token, kein Request');
+      //
       //   return false;
       // }
 

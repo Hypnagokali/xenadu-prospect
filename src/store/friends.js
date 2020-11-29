@@ -70,14 +70,12 @@ export default {
   },
   actions: {
     async refreshUserProfile({ dispatch }, userId) {
-      console.log('REFRESH USER VIEW!');
       dispatch('initUserView', userId);
       dispatch('initFriendList');
     },
     async unfriend({ dispatch }, userId) {
       await axios.post(`users/${userId}/unfriend`)
-        .then((response) => {
-          console.log(response.data);
+        .then(() => {
           dispatch('refreshUserProfile', userId);
         })
         .catch((e) => {
@@ -86,8 +84,7 @@ export default {
     },
     async acceptFriendship({ dispatch }, userId) {
       await axios.post(`users/${userId}/accept`)
-        .then((response) => {
-          console.log(response.data);
+        .then(() => {
           dispatch('refreshUserProfile', userId);
         })
         .catch((e) => {
@@ -96,8 +93,7 @@ export default {
     },
     async denyFriendship({ dispatch }, userId) {
       await axios.post(`users/${userId}/deny`)
-        .then((response) => {
-          console.log(response.data);
+        .then(() => {
           dispatch('refreshUserProfile', userId);
         })
         .catch((e) => {
@@ -106,8 +102,7 @@ export default {
     },
     async sendFriendRequest({ dispatch }, userId) {
       await axios.post(`users/${userId}/add`)
-        .then((response) => {
-          console.log(response.data);
+        .then(() => {
           dispatch('refreshUserProfile', userId);
         })
         .catch((e) => {
@@ -117,8 +112,6 @@ export default {
     async initFriendList({ commit }) {
       await axios.get('users/friends')
         .then((response) => {
-          console.log('FRIENDS');
-          console.table(response.data);
           commit('SET_FRIENDLIST', response.data);
         })
         .catch((e) => {
@@ -126,13 +119,10 @@ export default {
         });
     },
     async initUserView({ commit }, userId) {
-      console.log('INIT USER VIEW!');
       commit('START_WAITING');
-      console.log('User ID: ', userId);
       commit('CLEAR_ERROR_MSG');
       await axios.get(`users/${userId}`)
         .then((response) => {
-          console.table(response.data);
           commit('SET_USER_VIEW', response.data);
         })
         .catch((e) => {

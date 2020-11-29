@@ -80,7 +80,7 @@ export default {
     },
     passToParrent(goal) {
       this.$emit('displayDeleteModal', goal);
-      console.log('GOAL OVERVIEW WRAPPER -> MSG', goal);
+
     },
   },
 };

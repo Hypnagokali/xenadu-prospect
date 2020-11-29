@@ -21,6 +21,9 @@ export default {
   },
 
   mutations: {
+    ADD_GOAL() {
+
+    },
     SET_DONE(state, id) {
       let goal = null;
       state.goalsCollectionArray.forEach((goalsCollection) => {
@@ -69,8 +72,6 @@ export default {
         reschedule: true,
       }).then((response) => {
         commit('REMOVE_GOAL', Goal.createGoalFromData(response.data));
-      }).catch((e) => {
-        console.log('Fehler', e);
       });
     },
     async postpone({ commit }, goal) {
@@ -85,8 +86,6 @@ export default {
         description: goal.description,
       }).then((response) => {
         commit('REMOVE_GOAL', Goal.createGoalFromData(response.data));
-      }).catch((e) => {
-        console.log('Fehler', e);
       });
     },
     toggleStateDone({ commit }, goal) {
@@ -96,10 +95,7 @@ export default {
           const goalObject = Goal.createGoalFromData(response.data);
           commit('SET_DONE', goalObject.id);
         })
-        .catch((error) => {
-          console.log('Fehler bei setState');
-          console.log(error);
-        })
+        .catch()
         .finally(() => {
           commit({ type: 'TOGGLE_LOADING' }, { options: { root: true } });
         });
@@ -110,9 +106,6 @@ export default {
       await axios.post(`prospect/week/goal/${id}/delete`)
         .then(() => {
           commit('REMOVE_GOAL', goal);
-        })
-        .catch((error) => {
-          console.log(error);
         });
     },
 
@@ -180,9 +173,6 @@ export default {
     },
 
     async create({ commit }, goalInput) {
-      // post goal data to api
-      console.log('POST data');
-      console.log(goalInput.cw);
       commit('SET_ERROR_MESSAGES', '');
 
       await axios.post('prospect/week/goal', {
@@ -192,8 +182,6 @@ export default {
         workload_level: goalInput.workloadLevel,
       })
         .then((response) => {
-          console.log(response.data);
-          /* use dispatch('createGoalFromData', response.data) */
           const weekData = response.data.week;
           const workloadPointsData = response.data.workloadPoints;
           const goalObj = {

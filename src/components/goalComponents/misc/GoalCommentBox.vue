@@ -89,14 +89,12 @@ export default {
         this.commentFailureMessage = 'Ein Kommentar darf keine 1000 Zeichen übersteigen';
       } else if (this.comment.length > 0) {
         this.commentFailureMessage = '';
-        console.log('Kommentar abschicken...');
         this.isLoading = true;
         this.saveComment(commentData)
           .then((refreshedComments) => {
             this.currentCommentArray = refreshedComments;
           })
-          .catch((e) => {
-            console.log(e);
+          .catch(() => {
             this.commentFailureMessage = 'Irgendwas hat nicht funktioniert';
           })
           .finally(() => {
